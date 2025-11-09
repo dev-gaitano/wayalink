@@ -4,7 +4,6 @@ import psycopg2
 
 USERNAME = "sandbox"
 API_KEY = "atsk_2e05fc2a2455066c623e6007db868e0a80ab0050658bee12b2118eabc8c125de8f7cd415"
-
 africastalking.initialize(USERNAME, API_KEY)
 
 app = Flask(__name__)
@@ -23,7 +22,7 @@ def ussd() -> Response:
     phone_number = request.form.get("phoneNumber")
     # get user_id tied to the phone phone_number from users table
     # get location_id
-    # get_timestamp
+    # get timestamp (current time)
     text = request.form.get("text")
 
     # USSD logic
@@ -38,6 +37,12 @@ def ussd() -> Response:
         # request notes (if Any)
         # check if shipment exists in shipments table
         # store data in shipment_events table
+        #   - user_id
+        #   - shipment_id
+        #   - location_id
+        #   - timestamp
+        #   - status
+        #   - notes (if any)
     elif text == "2":
         # request shipment_id
         response = "CON Enter shipment ID"
