@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://res.cloudinary.com/diwkfbsgv/image/upload/v1762786228/banner_yzffos.png" alt="banner_img">
+    <img src="https://res.cloudinary.com/diwkfbsgv/image/upload/v1762788273/banner_roudux.png" alt="banner_img">
 </div>
 
 <a id="readme-top"></a>
