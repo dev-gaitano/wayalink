@@ -1,6 +1,7 @@
 from flask import Flask, request, Response
 import africastalking
-import psycopg2
+from flask import Flask, request, Response
+from database_connection import db_connection
 from datetime import datetime
 
 USERNAME = "sandbox"
@@ -9,10 +10,6 @@ africastalking.initialize(USERNAME, API_KEY)
 
 app = Flask(__name__)
 
-def db_connection():
-    return psycopg2.connect(host="localhost", dbname="wayalink",
-                              user="gaitano", password="1337", port=5432)
-
 @app.route("/ussd", methods=["POST"])
 def ussd() -> Response:
     connection = db_connection()
@@ -20,6 +17,7 @@ def ussd() -> Response:
 
     session_id = request.form.get("sessionId")
     phone_number = request.form.get("phoneNumber")
+
     # Get user_id and location_id tied to the phone_number from users table
     cursor.execute("SELECT id, location_id FROM users WHERE phone_number = %s", (phone_number,))
     user_data = cursor.fetchone()
