@@ -101,10 +101,9 @@ def ussd() -> Response:
             status_map = {
                 "1": "Picked Up",
                 "2": "In Transit",
-                "3": "Out for Delivery",
-                "4": "Delivered",
-                "5": "Delayed",
-                "6": "Failed"
+                "3": "Delivered",
+                "4": "Damaged",
+                "5": "Lost"
             }
             
             status = status_map.get(status_option, "Unknown")
