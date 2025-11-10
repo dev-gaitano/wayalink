@@ -1,11 +1,14 @@
-from flask import Flask, request, Response
+import os
+from dotenv import load_dotenv
 import africastalking
 from flask import Flask, request, Response
 from database_connection import db_connection
 from datetime import datetime
 
-USERNAME = "sandbox"
-API_KEY = "atsk_8cfd6ec2570575aee502d26b4153adfebd9beb26ef6e81dbb5e84c517f0faee49526da9b"
+load_dotenv()
+
+USERNAME = os.getenv("AT_USERNAME")
+API_KEY = os.getenv("AT_API_KEY")
 africastalking.initialize(USERNAME, API_KEY)
 
 app = Flask(__name__)
