@@ -7,30 +7,6 @@
 <br />
 <br />
 
-<!--[> PROJECT SHIELDS <]
-<div align="center">
-
-  <a href="https://github.com/dev-gaitano/jasmijn-schrofer-frontend/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/dev-gaitano/jasmijn-schrofer-frontend.svg?style=for-the-badge" alt="Contributors">
-  </a>
-  <a href="https://github.com/dev-gaitano/jasmijn-schrofer-frontend/network/members">
-    <img src="https://img.shields.io/github/forks/dev-gaitano/jasmijn-schrofer-frontend.svg?style=for-the-badge" alt="Forks">
-  </a>
-  <a href="https://github.com/dev-gaitano/jasmijn-schrofer-frontend/stargazers">
-    <img src="https://img.shields.io/github/stars/dev-gaitano/jasmijn-schrofer-frontend.svg?style=for-the-badge" alt="Stars">
-  </a>
-  <a href="https://github.com/dev-gaitano/jasmijn-schrofer-frontend/issues">
-    <img src="https://img.shields.io/github/issues/dev-gaitano/jasmijn-schrofer-frontend.svg?style=for-the-badge" alt="Issues">
-  </a>
-  <a href="https://github.com/dev-gaitano/jasmijn-schrofer-frontend/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/dev-gaitano/jasmijn-schrofer-frontend.svg?style=for-the-badge" alt="License">
-  </a>
-
-</div>
-
-<br />
-<br />-->
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -64,10 +40,12 @@ This project aims to, improve end-to-end product visibility in fragmented logist
 wayalink/
 ├── .git/                   # Git repository data
 ├── .gitignore              # Git ignore rules
+├── database.sql            # Database population script
 ├── database_connection.py  # File that sets uo the database connection
 ├── main.py                 # Main Python file
-├── populate_database.sql   # Database population script
-└── README.md               # Project documentation
+├── README.md               # Project documentation
+├── requirements.txt        # Required dependencies
+└── seed_data.py            # Seed Data
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -127,16 +105,3 @@ Nurhan Garang  - garangnurhan57@gmail.com
 <div align="center">
     <a href="#readme-top">back to top</a>
 </div>
-
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[contributors-shield]: https://img.shields.io/github/contributors/dev-gaitano/jasmijn-schrofer-frontend.svg?style=for-the-badge
-[contributors-url]: https://github.com/dev-gaitano/jasmijn-schrofer-frontend/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/dev-gaitano/jasmijn-schrofer-frontend.svg?style=for-the-badge
-[forks-url]: https://github.com/dev-gaitano/jasmijn-schrofer-frontend/network/members
-[stars-shield]: https://img.shields.io/github/stars/dev-gaitano/jasmijn-schrofer-frontend.svg?style=for-the-badge
-[stars-url]: https://github.com/dev-gaitano/jasmijn-schrofer-frontend/stargazers
-[issues-shield]: https://img.shields.io/github/issues/dev-gaitano/jasmijn-schrofer-frontend.svg?style=for-the-badge
-[issues-url]: https://github.com/dev-gaitano/jasmijn-schrofer-frontend/issues
-[license-shield]: https://img.shields.io/github/license/dev-gaitano/jasmijn-schrofer-frontend.svg?style=for-the-badge
-[license-url]: https://github.com/dev-gaitano/jasmijn-schrofer-frontend/blob/main/LICENSE
