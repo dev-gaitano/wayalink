@@ -50,12 +50,7 @@ WayaLink is a dual-interface logistics tracking system designed to improve end-t
 
 ### Project Demo
 
-<div align="center">
-  <video >
-    <source src="https://res.cloudinary.com/diwkfbsgv/video/upload/v1762841009/lv_0_20251111085050_pptayv.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</div>
+![Demo][demo]
 
 ### Project Structure
 
@@ -415,3 +410,6 @@ This project is part of the WUD Africa AI Hackathon 2025.
 <div align="center">
     <a href="#readme-top">back to top</a>
 </div>
+
+
+[demo]: https://res.cloudinary.com/diwkfbsgv/video/upload/v1762841009/lv_0_20251111085050_pptayv.mp4
