@@ -412,4 +412,4 @@ This project is part of the WUD Africa AI Hackathon 2025.
 </div>
 
 
-[demo]: media/demo.mp4
+[demo]: media/demo.webp
