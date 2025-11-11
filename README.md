@@ -13,8 +13,8 @@
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-      <a href="#project-demo">About The Project</a>
       <ul>
+        <li><a href="#project-demo">Project Demo</a></li>
         <li><a href="#project-structure">Project Structure</a></li>
       </ul>
     </li>
