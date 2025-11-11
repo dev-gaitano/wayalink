@@ -13,6 +13,7 @@
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
+      <a href="#project-demo">About The Project</a>
       <ul>
         <li><a href="#project-structure">Project Structure</a></li>
       </ul>
@@ -46,6 +47,15 @@ WayaLink is a dual-interface logistics tracking system designed to improve end-t
 - 👥 **Built-in Accountability**: Every action tied to a user and location
 - 📝 **Complete Audit Trail**: Immutable event log for all status changes
 - 📊 Admin Dashboard: Web-based UI for analytics and management
+
+### Project Demo
+
+<div align="center">
+  <video width="100%" controls>
+    <source src="https://res.cloudinary.com/diwkfbsgv/video/upload/v1762841009/lv_0_20251111085050_pptayv.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
 
 ### Project Structure
 
@@ -156,6 +166,7 @@ python3 seed_data.py
 ```
 
 This will create:
+
 - 7 locations (manufacturers, warehouses, retailers)
 - 26 test users
 - 20 sample shipments
@@ -194,18 +205,21 @@ Copy the HTTPS forwarding URL (e.g., `https://abc123.ngrok.io`)
 ### Testing the USSD Interface
 
 #### Option 1: Using Africa's Talking Simulator
+
 1. Go to your Africa's Talking dashboard
-2. Navigate to **USSD** → **Simulator**
+2. Navigate to **Launch Simulator**
 3. Enter a test phone number from the seeded data (e.g., `+254712345678`)
 4. Dial your USSD code
 
 #### Option 2: Using a Real Phone (Production)
+
 1. Dial your USSD code (e.g., `*384*96#`)
 2. Follow the menu prompts
 
 ### USSD Menu Flow
 
 #### Main Menu
+
 ```
 Welcome to WayaLink
 1. Log Shipment
@@ -214,6 +228,7 @@ Welcome to WayaLink
 ```
 
 #### Log Shipment Flow
+
 1. Select option `1`
 2. Enter tracking code (e.g., `WL-2025-001`)
 3. Select status:
@@ -226,6 +241,7 @@ Welcome to WayaLink
 5. Confirmation message appears
 
 #### Track Shipment Flow
+
 1. Select option `2`
 2. Enter tracking code (e.g., `WL-2025-001`)
 3. View shipment details:
@@ -236,14 +252,17 @@ Welcome to WayaLink
 ### Test Data
 
 **Sample Tracking Codes**:
+
 - `WL-2025-001` to `WL-2025-020`
 
 **Sample Phone Numbers** (for authentication):
+
 - `+254712345678` (John Kamau - Admin at Kikuyu Textiles)
 - `+254723456789` (Mary Wanjiku - Field at Kikuyu Textiles)
 - `+254756789012` (David Mwangi - Admin at Nairobi Central Warehouse)
 
 **Sample Locations**:
+
 - Kikuyu Textiles Ltd (Manufacturer - Kiambu)
 - Nairobi Central Warehouse (Warehouse - Nairobi)
 - Eldoret Retail Hub (Retailer - Uasin Gishu)
@@ -276,28 +295,36 @@ GROUP BY u.name, l.name;
 ### Common Issues
 
 **1. Database Connection Error**
+
 ```
 Error: FATAL: database "wayalink" does not exist
 ```
+
 **Solution**: Create the database first:
+
 ```sh
 psql -U postgres -c "CREATE DATABASE wayalink;"
 ```
 
 **2. Africa's Talking Webhook Error**
+
 ```
 Error: User not registered. Please contact support.
 ```
+
 **Solution**: Ensure the phone number exists in the `users` table. Use one of the seeded phone numbers.
 
 **3. ngrok Session Expired**
 **Solution**: Restart ngrok and update the Africa's Talking webhook URL with the new ngrok URL.
 
 **4. Import Error for psycopg2**
+
 ```
 Error: No module named 'psycopg2'
 ```
+
 **Solution**: Install PostgreSQL development libraries:
+
 ```sh
 # Ubuntu/Debian
 sudo apt-get install libpq-dev
@@ -310,10 +337,13 @@ pip install psycopg2
 ```
 
 **5. Port Already in Use**
+
 ```
 Error: Address already in use
 ```
+
 **Solution**: Change the Flask port in `main.py`:
+
 ```python
 app.run(debug=True, port=5001)
 ```
