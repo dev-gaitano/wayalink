@@ -13,6 +13,7 @@ africastalking.initialize(USERNAME, API_KEY)
 
 app = Flask(__name__)
 
+
 @app.route("/ussd", methods=["POST"])
 def ussd() -> Response:
     connection = db_connection()
@@ -22,7 +23,9 @@ def ussd() -> Response:
     phone_number = request.form.get("phoneNumber")
 
     # Get user_id and location_id tied to the phone_number from users table
-    cursor.execute("SELECT id, location_id FROM users WHERE phone_number = %s", (phone_number,))
+    cursor.execute(
+        "SELECT id, location_id FROM users WHERE phone_number = %s", (phone_number,)
+    )
     user_data = cursor.fetchone()
     if not user_data:
         response = "END User not registered. Please contact support."
@@ -49,15 +52,18 @@ def ussd() -> Response:
 
     elif text.startswith("1*"):
         parts = text.split("*")
-        
+
         if len(parts) == 2:
             # User entered Tracking Code
             tracking_code = parts[1]
-            
+
             # check if shipment exists in shipments table
-            cursor.execute("SELECT tracking_code FROM shipments WHERE tracking_code = %s", (tracking_code,))
+            cursor.execute(
+                "SELECT tracking_code FROM shipments WHERE tracking_code = %s",
+                (tracking_code,),
+            )
             shipment_exists = cursor.fetchone()
-            
+
             if not shipment_exists:
                 response = "END Tracking code not found."
 
@@ -69,46 +75,46 @@ def ussd() -> Response:
                 response += "3. Delivered\n"
                 response += "4. Damaged\n"
                 response += "5. Lost"
-        
+
         elif len(parts) == 3:
             # User selected status
             tracking_code = parts[1]
             status_option = parts[2]
-            
+
             status_map = {
                 "1": "Picked Up",
                 "2": "In Transit",
                 "3": "Delivered",
                 "4": "Damaged",
-                "5": "Lost"
+                "5": "Lost",
             }
-            
+
             status = status_map.get(status_option, "Unknown")
-            
+
             if status == "Unknown":
                 response = "END Invalid status option."
 
             else:
                 response = "CON Add notes? (Enter notes or type 0 for none):"
-        
+
         elif len(parts) == 4:
             # User entered notes or skipped
             # request notes (if Any)
             tracking_code = parts[1]
             status_option = parts[2]
             notes_input = parts[3]
-            
+
             status_map = {
                 "1": "Picked Up",
                 "2": "In Transit",
                 "3": "Delivered",
                 "4": "Damaged",
-                "5": "Lost"
+                "5": "Lost",
             }
-            
+
             status = status_map.get(status_option, "Unknown")
             notes = None if notes_input == "0" else notes_input
-            
+
             # store data in shipment_events table
             #   - session_id
             #   - user_id
@@ -117,19 +123,32 @@ def ussd() -> Response:
             #   - timestamp
             #   - status
             #   - notes (if any)
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO shipment_events (session_id, tracking_code,
                                              recorded_by, location_id, status,
                                              created_at, notes)
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
-            """, (session_id, tracking_code, user_id, user_location_id, status,
-                  timestamp, notes))
-            
+            """,
+                (
+                    session_id,
+                    tracking_code,
+                    user_id,
+                    user_location_id,
+                    status,
+                    timestamp,
+                    notes,
+                ),
+            )
+
             # Update shipment status in shipments table
-            cursor.execute("""
+            cursor.execute(
+                """
                 UPDATE shipments SET status = %s WHERE tracking_code = %s
-            """, (status, tracking_code))
-            
+            """,
+                (status, tracking_code),
+            )
+
             response = f"END Shipment {tracking_code} logged successfully with status: {status}"
 
         else:
@@ -141,20 +160,23 @@ def ussd() -> Response:
 
     elif text.startswith("2*"):
         parts = text.split("*")
-        
+
         if len(parts) == 2:
             # User entered Tracking Code
             tracking_code = parts[1]
 
             # Check if shipment exists and get its data
-            cursor.execute("""
+            cursor.execute(
+                """
                 SELECT s.status, l_origin.name as origin, l_dest.name as destination
                 FROM shipments s
                 LEFT JOIN locations l_origin ON s.origin_id = l_origin.id
                 LEFT JOIN locations l_dest ON s.destination_id = l_dest.id
                 WHERE s.tracking_code = %s
-            """, (tracking_code,))
-            
+            """,
+                (tracking_code,),
+            )
+
             shipment_data = cursor.fetchone()
 
             if not shipment_data:
@@ -185,5 +207,6 @@ def ussd() -> Response:
 
     return Response(response, mimetype="text/plain")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True)
