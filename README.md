@@ -335,7 +335,7 @@ app.run(debug=True, port=5001)
 ### Database Schema
 
 <div align="center">
-    <img src="https://res.cloudinary.com/diwkfbsgv/image/upload/v1762835382/database_design_yko6qr.png" alt="banner_img">
+    <img src="https://res.cloudinary.com/diwkfbsgv/image/upload/v1762835675/database_design_ss2cxw.png" alt="banner_img">
 </div>
 
 - **locations**: Physical supply chain nodes
