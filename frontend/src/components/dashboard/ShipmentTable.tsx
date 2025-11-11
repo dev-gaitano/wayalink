@@ -1,104 +1,77 @@
 import React from 'react';
-import { StatusBadge, ShipmentStatus } from '@/components/ui/status-badge';
+import { StatusBadge } from '../ui/StatusBadge';
 import { Eye, MapPin } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
-interface Location {
-  name: string;
-  type: string;
-}
-
-interface Shipment {
-  id: number;
-  tracking_code: string;
-  origin: Location;
-  destination: Location;
-  status: ShipmentStatus;
-  last_update: string;
-}
-
-interface ShipmentTableProps {
-  shipments: Shipment[];
-  onViewDetails?: (trackingCode: string) => void;
-  loading?: boolean;
-}
-
-export const ShipmentTable: React.FC<ShipmentTableProps> = ({ 
-  shipments, 
-  onViewDetails, 
-  loading = false 
-}) => {
+export const ShipmentTable = ({ shipments, onViewDetails, loading = false }) => {
   if (loading) {
     return (
-      <div className="animate-pulse space-y-2">
+      <div className="animate-pulse">
         {[1, 2, 3, 4, 5].map(i => (
-          <div key={i} className="h-16 bg-muted rounded"></div>
+          <div key={i} className="h-16 bg-gray-100 rounded mb-2"></div>
         ))}
       </div>
     );
   }
-  
+
   return (
-    <div className="overflow-x-auto rounded-lg border border-border">
-      <table className="min-w-full divide-y divide-border">
-        <thead className="bg-muted/50">
+    <div className="overflow-x-auto rounded-lg border border-gray-200">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
               Tracking Code
             </th>
-            <th className="px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
               Origin
             </th>
-            <th className="px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
               Destination
             </th>
-            <th className="px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
               Status
             </th>
-            <th className="px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
               Last Update
             </th>
-            <th className="px-6 py-3 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <th className="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
               Actions
             </th>
           </tr>
         </thead>
-        <tbody className="bg-card divide-y divide-border">
+        <tbody className="bg-white divide-y divide-gray-200">
           {shipments.map((shipment) => (
-            <tr key={shipment.id} className="hover:bg-muted/30 transition-colors duration-150">
+            <tr key={shipment.id} className="hover:bg-gray-50 transition-colors duration-150">
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm font-medium text-foreground">{shipment.tracking_code}</div>
+                <div className="text-sm font-medium text-gray-900">{shipment.tracking_code}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="flex items-center text-sm text-foreground">
-                  <MapPin className="w-4 h-4 mr-1 text-muted-foreground" />
+                <div className="flex items-center text-sm text-gray-900">
+                  <MapPin className="w-4 h-4 mr-1 text-gray-400" />
                   {shipment.origin.name}
                 </div>
-                <div className="text-xs text-muted-foreground">{shipment.origin.type}</div>
+                <div className="text-xs text-gray-500">{shipment.origin.type}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="flex items-center text-sm text-foreground">
-                  <MapPin className="w-4 h-4 mr-1 text-muted-foreground" />
+                <div className="flex items-center text-sm text-gray-900">
+                  <MapPin className="w-4 h-4 mr-1 text-gray-400" />
                   {shipment.destination.name}
                 </div>
-                <div className="text-xs text-muted-foreground">{shipment.destination.type}</div>
+                <div className="text-xs text-gray-500">{shipment.destination.type}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <StatusBadge status={shipment.status} />
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {new Date(shipment.last_update).toLocaleDateString()}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => onViewDetails?.(shipment.tracking_code)}
-                  className="inline-flex items-center text-primary hover:text-primary-700"
+                <button
+                  onClick={() => onViewDetails(shipment.tracking_code)}
+                  className="text-primary-600 hover:text-primary-900 inline-flex items-center"
                 >
                   <Eye className="w-4 h-4 mr-1" />
                   View
-                </Button>
+                </button>
               </td>
             </tr>
           ))}
