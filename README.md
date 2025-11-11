@@ -33,7 +33,10 @@
 
 ## About The Project
 
-WayaLink is a USSD-based logistics tracking system designed to improve end-to-end product visibility in fragmented supply chains. Built specifically for regions with low technology adoption, WayaLink works on any mobile phone (including feature phones) without requiring internet connectivity.
+WayaLink is a dual-interface logistics tracking system designed to improve end-to-end product visibility in fragmented supply chains. Built specifically for regions with low technology adoption, WayaLink combines:
+
+1. **USSD Interface for field workers:** Works on any mobile phone (including feature phones) without requiring internet connectivity
+2. **Web Dashboard for managers & admins:** Provides analytics, reporting, and system management capabilities
 
 ### Key Features
 
@@ -42,6 +45,7 @@ WayaLink is a USSD-based logistics tracking system designed to improve end-to-en
 - 📦 **Real-time Tracking**: Track shipments at every supply chain point
 - 👥 **Built-in Accountability**: Every action tied to a user and location
 - 📝 **Complete Audit Trail**: Immutable event log for all status changes
+- 📊 Admin Dashboard: Web-based UI for analytics and management
 
 ### Project Structure
 
@@ -322,12 +326,17 @@ app.run(debug=True, port=5001)
 
 ### Project Architecture
 
+**Frontend**: React JS
 **Backend**: Python Flask  
 **Database**: PostgreSQL  
 **USSD Gateway**: Africa's Talking  
 **Authentication**: Phone number-based
 
 ### Database Schema
+
+<div align="center">
+    <img src="https://res.cloudinary.com/diwkfbsgv/image/upload/v1762835382/database_design_yko6qr.png" alt="banner_img">
+</div>
 
 - **locations**: Physical supply chain nodes
 - **users**: Registered workers tied to locations
@@ -349,45 +358,6 @@ python3 main.py
 # Use the Africa's Talking USSD simulator
 # Test all menu flows
 ```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- DEPLOYMENT -->
-
-## Deployment
-
-### Production Checklist
-
-- [ ] Replace sandbox credentials with production Africa's Talking credentials
-- [ ] Use a production database (not localhost)
-- [ ] Deploy behind HTTPS (required by Africa's Talking)
-- [ ] Use a production WSGI server (Gunicorn, uWSGI)
-- [ ] Set up database backups
-- [ ] Implement logging and monitoring
-- [ ] Set up error tracking (Sentry, etc.)
-- [ ] Configure environment variables securely
-- [ ] Test with real users and phones
-
-### Deployment Options
-
-**Option 1: Heroku**
-```sh
-heroku create wayalink
-heroku addons:create heroku-postgresql
-git push heroku main
-```
-
-**Option 2: AWS EC2**
-1. Launch an EC2 instance
-2. Install PostgreSQL and Python
-3. Clone repository
-4. Set up Nginx and Gunicorn
-5. Configure domain and SSL
-
-**Option 3: DigitalOcean**
-1. Create a droplet
-2. Set up PostgreSQL
-3. Deploy with Docker or directly
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
