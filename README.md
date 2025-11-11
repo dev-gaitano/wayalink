@@ -51,7 +51,7 @@ WayaLink is a dual-interface logistics tracking system designed to improve end-t
 ### Project Demo
 
 <div align="center">
-  <video width="100%" controls>
+  <video >
     <source src="https://res.cloudinary.com/diwkfbsgv/video/upload/v1762841009/lv_0_20251111085050_pptayv.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
