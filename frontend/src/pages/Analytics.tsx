@@ -4,7 +4,7 @@ import { TrendingUp, Package, Clock, AlertCircle } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { api } from '../api/client';
 
-export const Analytics = () => {
+export const Analytic = () => {
   const [statusDistribution, setStatusDistribution] = useState([]);
   const [timeline, setTimeline] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -66,8 +66,8 @@ export const Analytics = () => {
                 key={days}
                 onClick={() => setTimeRange(days)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${timeRange === days
-                    ? 'bg-primary-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
               >
                 {days} Days

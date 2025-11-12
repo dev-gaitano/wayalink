@@ -6,8 +6,10 @@ import { Shipments } from './pages/Shipments';
 import { ShipmentDetail } from './pages/ShipmentDetail';
 import { Locations } from './pages/Locations';
 import { Users } from './pages/Users';
-import { Analytics } from './pages/Analytics';
+import { Analytic } from './pages/Analytics';
 import NotFound from "./pages/NotFound";
+
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   return (
@@ -19,9 +21,10 @@ function App() {
           <Route path="/shipments/:trackingCode" element={<ShipmentDetail />} />
           <Route path="/locations" element={<Locations />} />
           <Route path="/users" element={<Users />} />
-          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/analytics" element={<Analytic />} />
         </Routes>
       </Layout>
+      <Analytics />
     </Router>
   );
 }
