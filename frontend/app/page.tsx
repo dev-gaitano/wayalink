@@ -113,10 +113,9 @@ export default function LogisticsDashboard() {
                     onClick={() => setActiveSection(item.id)}
                     className={`
                       w-full flex items-center text-sm font-semibold tracking-wider cursor-pointer transition-all duration-300
-                      ${
-                        isActive
-                          ? "bg-[#ff6b35] text-white -mx-6 pr-6 my-4 py-4 shadow-lg relative"
-                          : "text-gray-500 hover:text-[#ff6b35] py-2"
+                      ${isActive
+                        ? "bg-[#ff6b35] text-white -mx-6 pr-6 my-4 py-4 shadow-lg relative"
+                        : "text-gray-500 hover:text-[#ff6b35] py-2"
                       }
                     `}
                   >
@@ -150,7 +149,7 @@ export default function LogisticsDashboard() {
               <div className="flex items-center space-x-4 text-white/80">
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                  <span className="uppercase tracking-widest text-sm font-semibold">LogiTrack</span>
+                  <span className="tracking-widest text-sm font-semibold">WAYALINK</span>
                 </div>
               </div>
 
@@ -203,7 +202,7 @@ export default function LogisticsDashboard() {
                 <div className="absolute z-40 p-8 w-[60%] h-[35%] top-1/2 left-0 transform -translate-y-1/2 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-r-3xl shadow-2xl">
                   <p className="text-xl font-light text-gray-100 mb-1">{activeData.prefix}</p>
                   <h2 className="text-4xl font-extrabold text-white leading-tight mb-4">{activeData.title}</h2>
-                  <div className="grid grid-cols-3 gap-4 mb-4">
+                  <div className="grid grid-cols-3 gap-4 mb-6">
                     {Object.entries(activeData.metrics).map(([key, value]) => (
                       <div key={key} className="text-white/90">
                         <div className="text-xs uppercase tracking-wider text-white/60 mb-1">{key}</div>
@@ -213,7 +212,7 @@ export default function LogisticsDashboard() {
                   </div>
                   <Button
                     onClick={handleViewDetails}
-                    className="bg-[#ff6b35] hover:bg-[#ff5722] text-white rounded-full shadow-lg"
+                    className="bg-[#ff6b35] hover:bg-[#ff5722] hover:cursor-pointer text-white rounded-full shadow-lg"
                   >
                     View Details
                     <TrendingUp className="ml-2 h-4 w-4" />
@@ -231,12 +230,13 @@ export default function LogisticsDashboard() {
                   <Button
                     variant="ghost"
                     onClick={handleMonitor}
-                    className="uppercase text-xs font-bold tracking-widest text-white hover:text-gray-200 mb-4"
+                    className="uppercase text-xs font-bold tracking-widest text-white hover:text-gray-200 hover:cursor-pointer mb-4"
                   >
                     Monitor
+                    {/* Add a hover property for alert Icon */}
                     <AlertCircle className="ml-2 h-4 w-4" />
                   </Button>
-                  <div className="text-[8rem] font-black leading-none -mb-8">{activeData.stat}</div>
+                  <div className="text-[8rem] font-black leading-none mb-8">{activeData.stat}</div>
                   <div className="text-sm tracking-widest mb-10">{activeData.unit}</div>
 
                   {/* Status Indicators */}

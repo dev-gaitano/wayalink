@@ -6,8 +6,6 @@ Flask REST API endpoints for the admin dashboard
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from database_connection import db_connection
-from datetime import datetime, timedelta
-import json
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for React frontend

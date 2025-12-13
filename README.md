@@ -39,15 +39,6 @@ WayaLink is a dual-interface logistics tracking system designed to improve end-t
 1. **USSD Interface for field workers:** Works on any mobile phone (including feature phones) without requiring internet connectivity
 2. **Web Dashboard for managers & admins:** Provides analytics, reporting, and system management capabilities
 
-### Key Features
-
-- 📱 **Universal Access**: Works on any phone via USSD (no smartphone required)
-- 🌐 **Offline-First**: Functions without internet connectivity
-- 📦 **Real-time Tracking**: Track shipments at every supply chain point
-- 👥 **Built-in Accountability**: Every action tied to a user and location
-- 📝 **Complete Audit Trail**: Immutable event log for all status changes
-- 📊 Admin Dashboard: Web-based UI for analytics and management
-
 ### Project Demo
 
 ![Demo][demo]
@@ -398,13 +389,11 @@ This project is part of the WUD Africa AI Hackathon 2025.
 
 <!-- CONTACT -->
 
-## Contact
+## Contributors
 
 **Eugene Gaitano** - eugenecampbellgaitano@gmail.com  
 **Ian Njenga** - iank.njenga@gmail.com  
 **Nurhan Garang** - garangnurhan57@gmail.com
-
-**Project Link**: [https://github.com/dev-gaitano/wayalink](https://github.com/dev-gaitano/wayalink)
 
 <br />
 <br />
