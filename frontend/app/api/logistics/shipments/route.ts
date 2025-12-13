@@ -12,7 +12,7 @@ export async function GET() {
     title: "Active Shipments",
     prefix: "Tracking",
     stat: (2800 + Math.floor(Math.random() * 100)).toString(),
-    unit: "LIVE",
+    unit: "SHIPMENTS",
     metrics: {
       onTime: `${onTimePercentage.toFixed(1)}%`,
       delayed: `${delayedPercentage}%`,
