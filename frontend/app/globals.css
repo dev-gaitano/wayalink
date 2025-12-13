@@ -1,9 +1,5 @@
-@import 'tailwindcss';
 @import 'tw-animate-css';
 
-@custom-variant dark (&:is(.dark *));
-
-/* Updated color scheme for logistics dashboard - orange primary with dark neutrals */
 :root {
   --background: hsl(0, 0%, 98%);
   --foreground: hsl(0, 0%, 15%);
@@ -40,7 +36,6 @@
   --sidebar-ring: hsl(14, 100%, 53%);
 }
 
-/* Dark mode colors with deep blue-black backgrounds */
 .dark {
   --background: hsl(220, 13%, 9%);
   --foreground: hsl(0, 0%, 95%);
@@ -121,11 +116,11 @@
 * {
   border-color: var(--border);
   outline-color: hsla(var(--ring) / 0.5);
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
-  padding: 0;
   font-family: var(--font-sans);
   background-color: var(--background);
   color: var(--foreground);
@@ -360,79 +355,6 @@ body {
   font-weight: 600;
 }
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.refresh-button {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  transition: color 0.3s ease;
-}
-
-.refresh-button:hover {
-  color: white;
-}
-
-.refresh-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.refresh-icon {
-  width: 1rem;
-  height: 1rem;
-}
-
-.refresh-icon.spinning {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Search Form */
-.search-form {
-  position: relative;
-}
-
-.search-input {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-  color: white;
-  font-size: 0.875rem;
-  padding: 0.5rem 0.5rem 0.25rem;
-  width: 8rem;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-.search-input:focus {
-  border-bottom-color: white;
-}
-
-.search-input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
 /* Dashboard Content */
 .dashboard-content {
   flex-grow: 1;
@@ -485,8 +407,8 @@ body {
   position: absolute;
   z-index: 40;
   padding: 2rem;
-  width: 60%;
-  height: 35%;
+  width: 50%;
+  height: 28%;
   top: 50%;
   left: 0;
   transform: translateY(-50%);
@@ -497,26 +419,37 @@ body {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
+.central-panel-div-1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 90%;
+  margin-bottom: 2rem;
+}
+
+.central-panel-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
 .panel-prefix {
   font-size: 1.25rem;
   font-weight: 300;
   color: #e5e7eb;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
 }
 
 .panel-title {
   font-size: 2.25rem;
   font-weight: 800;
   color: white;
-  line-height: 1.2;
-  margin-bottom: 1rem;
 }
 
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  margin-bottom: 1.5rem;
 }
 
 .metric-item {
@@ -590,31 +523,96 @@ body {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: flex-end;
   color: white;
   z-index: 30;
 }
 
-.monitor-button {
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: white;
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.refresh-button {
   background: transparent;
   border: none;
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
   padding: 0.5rem;
-  margin-bottom: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-size: 0.875rem;
   transition: color 0.3s ease;
 }
 
-.monitor-button:hover {
-  color: #e5e7eb;
+.refresh-button:hover {
+  color: white;
+}
+
+.refresh-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.refresh-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.refresh-icon.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Search Form */
+.search-form {
+  position: relative;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.5rem 0.25rem;
+  width: 8rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  border-bottom-color: white;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.content-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.stats-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2.5rem;
 }
 
 .stat-number {
@@ -624,10 +622,29 @@ body {
   margin-bottom: 2rem;
 }
 
+.stat-unit-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+
 .stat-unit {
   font-size: 0.875rem;
   letter-spacing: 0.1em;
-  margin-bottom: 2.5rem;
+}
+
+.monitor-button {
+  height: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.monitor-button:hover {
+  color: #e5e7eb;
 }
 
 .status-indicators {
@@ -689,6 +706,10 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.user-info:hover {
+  cursor: pointer;
 }
 
 .truck-icon {

@@ -91,6 +91,7 @@ export default function LogisticsDashboard() {
           <div className="sidebar">
             {/* Top Header */}
             <div className="sidebar-header">
+              {/* TODO: Add action for account settings, on click */}
               <div className="user-info">
                 <div className="user-avatar">
                   <Truck className="truck-icon" />
@@ -137,25 +138,6 @@ export default function LogisticsDashboard() {
                 </div>
               </div>
 
-              <div className="header-right">
-                <button
-                  onClick={handleRefresh}
-                  disabled={isRefreshing}
-                  className="refresh-button"
-                >
-                  <RefreshCw className={`refresh-icon ${isRefreshing ? 'spinning' : ''}`} />
-                  Refresh
-                </button>
-                <form onSubmit={handleSearch} className="search-form">
-                  <input
-                    type="text"
-                    placeholder="Search tracking..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="search-input"
-                  />
-                </form>
-              </div>
             </header>
 
             {/* Main Dashboard Content */}
@@ -174,16 +156,21 @@ export default function LogisticsDashboard() {
               {/* Central Glassmorphic Panel */}
               {activeData ? (
                 <div className="central-panel">
-                  <p className="panel-prefix">{activeData.prefix}</p>
-                  <h2 className="panel-title">{activeData.title}</h2>
-                  <div className="metrics-grid">
-                    {Object.entries(activeData.metrics).map(([key, value]) => (
-                      <div key={key} className="metric-item">
-                        <div className="metric-label">{key}</div>
-                        <div className="metric-value">{value}</div>
-                      </div>
-                    ))}
+                  <div className="central-panel-div-1">
+                    <div className="central-panel-header">
+                      <p className="panel-prefix">{activeData.prefix}</p>
+                      <h2 className="panel-title">{activeData.title}</h2>
+                    </div>
+                    <div className="metrics-grid">
+                      {Object.entries(activeData.metrics).map(([key, value]) => (
+                        <div key={key} className="metric-item">
+                          <div className="metric-label">{key}</div>
+                          <div className="metric-value">{value}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
+
                   <button onClick={handleViewDetails} className="view-details-button">
                     View Details
                     <TrendingUp className="button-icon" />
@@ -198,22 +185,46 @@ export default function LogisticsDashboard() {
               {/* Right Orange Sidebar Content */}
               {activeData && (
                 <div className="right-sidebar">
-                  <button onClick={handleMonitor} className="monitor-button">
-                    Monitor
-                    <AlertCircle className="button-icon" />
-                  </button>
-                  <div className="stat-number">{activeData.stat}</div>
-                  <div className="stat-unit">{activeData.unit}</div>
 
-                  {/* Status Indicators */}
-                  <div className="status-indicators">
-                    <div className="status-row">
-                      <span className="status-label">Status</span>
-                      <div className="status-dot" />
+                  <div className="header-right">
+                    <button
+                      onClick={handleRefresh}
+                      disabled={isRefreshing}
+                      className="refresh-button"
+                    >
+                      <RefreshCw className={`refresh-icon ${isRefreshing ? 'spinning' : ''}`} />
+                      Refresh
+                    </button>
+                    <form onSubmit={handleSearch} className="search-form">
+                      <input
+                        type="text"
+                        placeholder="Search tracking..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="search-input"
+                      />
+                    </form>
+                  </div>
+
+                  <div className="content-right">
+                    <div className="stats-container">
+                      <div className="stat-number">{activeData.stat}</div>
+                      <div className="stat-unit-container">
+                        <div className="stat-unit">{activeData.unit}</div>
+                        <AlertCircle onClick={handleMonitor} className="monitor-button" />
+                      </div>
                     </div>
-                    <div className="status-row">
-                      <span className="status-label">Live</span>
-                      <Clock className="live-icon" />
+
+                    {/* Status Indicators */}
+                    <div className="status-indicators">
+                      <div className="status-row">
+                        <span className="status-label">Status</span>
+                        <div className="status-dot" />
+                      </div>
+                      <div className="status-row">
+                        <span className="status-label">Live</span>
+                        <Clock className="live-icon" />
+                      </div>
                     </div>
                   </div>
                 </div>
