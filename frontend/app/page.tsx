@@ -200,15 +200,6 @@ export default function LogisticsDashboard() {
                       <RefreshCw className={`refresh-icon ${isRefreshing ? 'spinning' : ''}`} />
                       Refresh
                     </button>
-                    <form onSubmit={handleSearch} className="search-form">
-                      <input
-                        type="text"
-                        placeholder="Search tracking..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="search-input"
-                      />
-                    </form>
                   </div>
 
                   <div className="content-right">
