@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic"
 export async function GET() {
   // Fetch data from backend active_shipments API
   const req = await fetch(
-    "http://localhost:5001/api/dashboard/active_shipments",
+    "https://wayalink-production.up.railway.app/api/dashboard/active_shipments",
     { cache: "no-store" }
   );
 
