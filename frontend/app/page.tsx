@@ -22,24 +22,24 @@ export default function LogisticsDashboard() {
   const [searchQuery, setSearchQuery] = useState("")
   const [isRefreshing, setIsRefreshing] = useState(false)
 
-  const { data: shipmentsData, mutate: mutateShipments } = useSWR<LogisticsData>("/components/shipments", fetcher, {
+  const { data: shipmentsData, mutate: mutateShipments } = useSWR<LogisticsData>("/api/dashboard/shipments", fetcher, {
     refreshInterval: 5000,
   })
-  const { data: fleetData, mutate: mutateFleet } = useSWR<LogisticsData>("/components/fleet", fetcher, {
+  const { data: fleetData, mutate: mutateFleet } = useSWR<LogisticsData>("/api/dashboard/fleet", fetcher, {
     refreshInterval: 5000,
   })
-  const { data: usersData, mutate: mutateUsers } = useSWR<LogisticsData>("/components/users", fetcher, {
+  const { data: usersData, mutate: mutateUsers } = useSWR<LogisticsData>("/api/dashboard/users", fetcher, {
     refreshInterval: 5000,
   })
   const { data: locationsData, mutate: mutateLocations } = useSWR<LogisticsData>(
-    "/components/locations",
+    "/api/dashboard/locations",
     fetcher,
     { refreshInterval: 5000 },
   )
-  const { data: routesData, mutate: mutateRoutes } = useSWR<LogisticsData>("/components/routes", fetcher, {
+  const { data: routesData, mutate: mutateRoutes } = useSWR<LogisticsData>("/api/dashboard/routes", fetcher, {
     refreshInterval: 5000,
   })
-  const { data: analyticsData, mutate: mutateAnalytics } = useSWR<LogisticsData>("/components/analytics", fetcher, {
+  const { data: analyticsData, mutate: mutateAnalytics } = useSWR<LogisticsData>("/api/dashboard/analytics", fetcher, {
     refreshInterval: 5000,
   })
 
