@@ -51,12 +51,14 @@ Full Demo [Cloudinary](https://res.cloudinary.com/diwkfbsgv/video/upload/v176294
 wayalink/
 ├── .git/                   # Git repository data
 ├── .gitignore              # Git ignore rules
+├── frontend                # Front-end files directory 
 ├── database.sql            # Database schema creation script
-├── database_connection.py  # Database connection configuration
+├── databaseConnection.py   # Database connection configuration
+├── frontendApi.py          # Back-end to Front-end data API
 ├── main.py                 # Main Flask application
-├── seed_data.py            # Database seeding script
+├── README.md               # Project documentation
 ├── requirements.txt        # Python dependencies
-└── README.md               # Project documentation
+└── seed_data.py            # Database seeding script
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -130,7 +132,7 @@ Create the database:
 
 ```sh
 # Login to PostgreSQL
-psql -U postgres
+psql -U your_postgres_username
 
 # Create database
 CREATE DATABASE wayalink;
@@ -237,45 +239,6 @@ Welcome to WayaLink
    - Destination location
    - Current status
 
-### Test Data
-
-**Sample Tracking Codes**:
-
-- `WL-2025-001` to `WL-2025-020`
-
-**Sample Phone Numbers** (for authentication):
-
-- `+254712345678` (John Kamau - Admin at Kikuyu Textiles)
-- `+254723456789` (Mary Wanjiku - Field at Kikuyu Textiles)
-- `+254756789012` (David Mwangi - Admin at Nairobi Central Warehouse)
-
-**Sample Locations**:
-
-- Kikuyu Textiles Ltd (Manufacturer - Kiambu)
-- Nairobi Central Warehouse (Warehouse - Nairobi)
-- Eldoret Retail Hub (Retailer - Uasin Gishu)
-
-### Database Queries
-
-Check shipments and events:
-
-```sql
--- View all shipments
-SELECT * FROM shipments;
-
--- View all events for a specific shipment
-SELECT * FROM shipment_events WHERE tracking_code = 'WL-2025-001';
-
--- View user activity
-SELECT u.name, l.name as location, COUNT(se.id) as events_logged
-FROM users u
-LEFT JOIN locations l ON u.location_id = l.id
-LEFT JOIN shipment_events se ON u.id = se.recorded_by
-GROUP BY u.name, l.name;
-```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- TROUBLESHOOTING -->
 
 ## Troubleshooting
@@ -291,7 +254,7 @@ Error: FATAL: database "wayalink" does not exist
 **Solution**: Create the database first:
 
 ```sh
-psql -U postgres -c "CREATE DATABASE wayalink;"
+psql -U your_postgres_username -c "CREATE DATABASE wayalink;"
 ```
 
 **2. Africa's Talking Webhook Error**
@@ -344,8 +307,8 @@ app.run(debug=True, port=5001)
 
 ### Project Architecture
 
-**Frontend**: React JS
-**Backend**: Python Flask  
+**Frontend**: Typescript
+**Backend**: Python
 **Database**: PostgreSQL  
 **USSD Gateway**: Africa's Talking  
 **Authentication**: Phone number-based
