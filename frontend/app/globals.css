@@ -329,6 +329,13 @@ body {
   gap: 0.5rem;
 }
 
+.orange-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #ff6b35;
+  border-radius: 50%;
+}
+
 .status-dot {
   width: 0.5rem;
   height: 0.5rem;
@@ -532,7 +539,7 @@ body {
 .header-right {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
   color: rgba(255, 255, 255, 0.8);
 }
 
