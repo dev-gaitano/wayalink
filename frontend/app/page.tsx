@@ -22,37 +22,41 @@ export default function LogisticsDashboard() {
   const [searchQuery, setSearchQuery] = useState("")
   const [isRefreshing, setIsRefreshing] = useState(false)
 
-  const { data: shipmentsData, mutate: mutateShipments } = useSWR<LogisticsData>("/api/logistics/shipments", fetcher, {
+  const { data: shipmentsData, mutate: mutateShipments } = useSWR<LogisticsData>("/components/shipments", fetcher, {
     refreshInterval: 5000,
   })
-  const { data: fleetData, mutate: mutateFleet } = useSWR<LogisticsData>("/api/logistics/fleet", fetcher, {
+  const { data: fleetData, mutate: mutateFleet } = useSWR<LogisticsData>("/components/fleet", fetcher, {
     refreshInterval: 5000,
   })
-  const { data: warehousesData, mutate: mutateWarehouses } = useSWR<LogisticsData>(
-    "/api/logistics/warehouses",
+  const { data: usersData, mutate: mutateUsers } = useSWR<LogisticsData>("/components/users", fetcher, {
+    refreshInterval: 5000,
+  })
+  const { data: locationsData, mutate: mutateLocations } = useSWR<LogisticsData>(
+    "/components/locations",
     fetcher,
     { refreshInterval: 5000 },
   )
-  const { data: analyticsData, mutate: mutateAnalytics } = useSWR<LogisticsData>("/api/logistics/analytics", fetcher, {
+  const { data: routesData, mutate: mutateRoutes } = useSWR<LogisticsData>("/components/routes", fetcher, {
     refreshInterval: 5000,
   })
-  const { data: routesData, mutate: mutateRoutes } = useSWR<LogisticsData>("/api/logistics/routes", fetcher, {
+  const { data: analyticsData, mutate: mutateAnalytics } = useSWR<LogisticsData>("/components/analytics", fetcher, {
     refreshInterval: 5000,
   })
 
   const dataMap: Record<string, LogisticsData | undefined> = {
     shipments: shipmentsData,
     fleet: fleetData,
-    warehouses: warehousesData,
-    analytics: analyticsData,
+    users: usersData,
+    locations: locationsData,
     routes: routesData,
+    analytics: analyticsData,
   }
 
   const activeData = dataMap[activeSection]
 
   const handleRefresh = async () => {
     setIsRefreshing(true)
-    await Promise.all([mutateShipments(), mutateFleet(), mutateWarehouses(), mutateAnalytics(), mutateRoutes()])
+    await Promise.all([mutateShipments(), mutateFleet(), mutateLocations(), mutateRoutes(), mutateUsers(), mutateAnalytics()])
     setTimeout(() => setIsRefreshing(false), 500)
   }
 
@@ -78,9 +82,10 @@ export default function LogisticsDashboard() {
   const navItems = [
     { id: "shipments", icon: Package, label: "ACTIVE SHIPMENTS", number: "01" },
     { id: "fleet", icon: Truck, label: "FLEET MANAGEMENT", number: "02" },
-    { id: "warehouses", icon: Warehouse, label: "WAREHOUSE NETWORK", number: "03" },
-    { id: "analytics", icon: BarChart3, label: "PERFORMANCE ANALYTICS", number: "04" },
+    { id: "users", icon: MapPin, label: "USER MANAGEMENT", number: "03" },
+    { id: "locations", icon: Warehouse, label: "LOCATION NETWORK", number: "04" },
     { id: "routes", icon: MapPin, label: "ROUTE OPTIMIZATION", number: "05" },
+    { id: "analytics", icon: BarChart3, label: "PERFORMANCE ANALYTICS", number: "06" },
   ]
 
   return (
@@ -133,7 +138,7 @@ export default function LogisticsDashboard() {
             <header className="main-header">
               <div className="header-left">
                 <div className="status-indicator">
-                  <div className="status-dot" />
+                  <div className="orange-dot" />
                   <span className="brand-name">WAYALINK</span>
                 </div>
               </div>
