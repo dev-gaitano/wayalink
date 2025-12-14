@@ -6,7 +6,7 @@ Generates realistic data for the Wayalink supply chain management system
 import uuid
 from datetime import datetime, timedelta
 import random
-from database_connection import db_connection
+from databaseConnection import db_connection
 
 # Seed for reproducibility
 random.seed(42)
