@@ -307,8 +307,8 @@ app.run(debug=True, port=5001)
 
 ### Project Architecture
 
-**Frontend**: Typescript
-**Backend**: Python
+**Frontend**: Typescript  
+**Backend**: Python  
 **Database**: PostgreSQL  
 **USSD Gateway**: Africa's Talking  
 **Authentication**: Phone number-based
