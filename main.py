@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 import africastalking
 from flask import Flask, request, Response
-from database_connection import db_connection
+from databaseConnection import db_connection
 from datetime import datetime
 
 load_dotenv()
