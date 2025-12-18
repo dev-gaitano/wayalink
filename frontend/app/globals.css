@@ -501,8 +501,8 @@ body {
   position: absolute;
   z-index: 40;
   padding: 2rem;
-  width: 60%;
-  height: 35%;
+  width: 50%;
+  height: 28%;
   top: 50%;
   left: 0;
   transform: translateY(-50%);

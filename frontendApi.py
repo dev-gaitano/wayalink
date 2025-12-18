@@ -1,6 +1,10 @@
 # create typscript interface with DB structure
 from flask import Flask
 from databaseConnection import db_connection
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -42,13 +46,14 @@ def active_shipments():
                    ON s.tracking_code = latest_statuses.tracking_code
                    WHERE latest_statuses.status = 'delivered';""")
 
-    sum_of_delivery_hours = int(cursor.fetchone()[0])
+    result = cursor.fetchone()[0]
+    sum_of_delivery_hours = int(result) if result is not None else 0
 
     # count of all delivered shipments
     total_delivered_shipments = all_status_counts.get("delivered", 0)
 
     # Divide sum by count
-    avg_delivery_hours = sum_of_delivery_hours / total_delivered_shipments
+    avg_delivery_hours = sum_of_delivery_hours / total_delivered_shipments if total_delivered_shipments > 0 else 0
         
     cursor.close()
     conn.close()
@@ -88,5 +93,5 @@ def shipments():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001) # Run on different port from main.py
-
+    port = int(os.getenv("PORT", 5001))
+    app.run(host="0.0.0.0", port=port, debug=False)
