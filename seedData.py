@@ -165,7 +165,6 @@ def clear_existing_data(connection):
     cursor.execute("""
         TRUNCATE TABLE shipment_events, shipments, route_stops, routes, 
                       fleets, users, locations RESTART IDENTITY CASCADE;
-        ALTER SEQUENCE tracking_code_seq RESTART WITH 1;
     """)
     connection.commit()
     cursor.close()
