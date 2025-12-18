@@ -46,13 +46,14 @@ def active_shipments():
                    ON s.tracking_code = latest_statuses.tracking_code
                    WHERE latest_statuses.status = 'delivered';""")
 
-    sum_of_delivery_hours = int(cursor.fetchone()[0])
+    result = cursor.fetchone()[0]
+    sum_of_delivery_hours = int(result) if result is not None else 0
 
     # count of all delivered shipments
     total_delivered_shipments = all_status_counts.get("delivered", 0)
 
     # Divide sum by count
-    avg_delivery_hours = sum_of_delivery_hours / total_delivered_shipments
+    avg_delivery_hours = sum_of_delivery_hours / total_delivered_shipments if total_delivered_shipments > 0 else 0
         
     cursor.close()
     conn.close()
