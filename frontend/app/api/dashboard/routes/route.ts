@@ -3,21 +3,30 @@ import { NextResponse } from "next/server"
 export const dynamic = "force-dynamic"
 
 export async function GET() {
+  // Fetch data from API
+  const req = await fetch(
+    "https://wayalink-production.up.railway.app/api/dashboard/route_optimization",
+    { cache: "no-store" }
+  )
+
+  // Store data in a variable as JSON
+  const route_optimization_data = await req.json()
+
+  const totalRoutes = Number(route_optimization_data.total_routes)
+  const activeRoutes = Number(route_optimization_data.active_routes)
+  const avgDistance = Number(route_optimization_data.avg_distance)
+  const avgStops = Number(route_optimization_data.avg_stops)
+
   return NextResponse.json({
     title: "Route Optimization",
-    prefix: "Optimizing",
-    stat: (840 + Math.floor(Math.random() * 20)).toString(),
+    prefix: "Monitoring",
+    stat: totalRoutes,
     unit: "ROUTES",
     metrics: {
-      efficiency: `${(92 + Math.random() * 4).toFixed(1)}%`,
-      fuelSaved: `${(15 + Math.random() * 5).toFixed(1)}%`,
-      avgTime: `${(3.0 + Math.random() * 0.5).toFixed(1)} hrs`,
+      "active-routes": `${(activeRoutes)} routes`,
+      "avg.distance": `${(avgDistance).toFixed(1)} Km`,
+      "avg.stops": `${(avgStops).toFixed(1)} stops`,
     },
     lastUpdated: new Date().toISOString(),
-    optimizedRoutes: [
-      { id: "RT-001", from: "Warehouse A", to: "Zone 1", savings: "23%", status: "active" },
-      { id: "RT-002", from: "Warehouse B", to: "Zone 2", savings: "18%", status: "active" },
-      { id: "RT-003", from: "Warehouse C", to: "Zone 3", savings: "31%", status: "active" },
-    ],
   })
 }
