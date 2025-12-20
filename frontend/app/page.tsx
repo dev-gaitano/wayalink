@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import useSWR from "swr"
-import { Package, Truck, Warehouse, BarChart3, MapPin, Clock, TrendingUp, AlertCircle, RefreshCw } from "lucide-react"
+import { Package, Truck, Warehouse, BarChart3, MapPin, User, Clock, TrendingUp, AlertCircle, RefreshCw } from "lucide-react"
 
 type LogisticsData = {
   title: string
@@ -72,17 +72,10 @@ export default function LogisticsDashboard() {
     alert("Opening full analytics reports...")
   }
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      alert(`Searching for: ${searchQuery}`)
-    }
-  }
-
   const navItems = [
     { id: "shipments", icon: Package, label: "ACTIVE SHIPMENTS", number: "01" },
     { id: "fleet", icon: Truck, label: "FLEET MANAGEMENT", number: "02" },
-    { id: "users", icon: MapPin, label: "USER MANAGEMENT", number: "03" },
+    { id: "users", icon: User, label: "USER MANAGEMENT", number: "03" },
     { id: "locations", icon: Warehouse, label: "LOCATION NETWORK", number: "04" },
     { id: "routes", icon: MapPin, label: "ROUTE OPTIMIZATION", number: "05" },
     { id: "analytics", icon: BarChart3, label: "PERFORMANCE ANALYTICS", number: "06" },
@@ -99,7 +92,7 @@ export default function LogisticsDashboard() {
               {/* TODO: Add action for account settings, on click */}
               <div className="user-info">
                 <div className="user-avatar">
-                  <Truck className="truck-icon" />
+                  <User className="user-icon" />
                 </div>
                 <div className="user-name">Admin</div>
               </div>
@@ -128,7 +121,7 @@ export default function LogisticsDashboard() {
             {/* Footer Link */}
             <button onClick={handleFullReports} className="footer-link">
               <TrendingUp className="trending-icon" />
-              <span>View Full Reports</span>
+              <span>View AI insights</span>
             </button>
           </div>
 
@@ -218,7 +211,7 @@ export default function LogisticsDashboard() {
                         <div className="status-dot" />
                       </div>
                       <div className="status-row">
-                        <span className="status-label">Live</span>
+                        <span className="status-label">{activeData.lastUpdated}</span>
                         <Clock className="live-icon" />
                       </div>
                     </div>
