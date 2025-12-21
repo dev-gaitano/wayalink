@@ -196,7 +196,7 @@ export default function LogisticsDashboard() {
             <header className="main-header">
               <div className="header-left">
                 <div className="status-indicator">
-                  <div className="orange-dot" />
+                  <div className="orange-dot pulsing" />
                   <span className="brand-name">WAYALINK</span>
                 </div>
               </div>
@@ -273,7 +273,7 @@ export default function LogisticsDashboard() {
                     <div className="status-indicators">
                       <div className="status-row">
                         <span className="status-label">Status</span>
-                        <div className="status-dot" />
+                        <div className="status-dot pulsing" />
                       </div>
                       <div className="status-row">
                         <span className="status-label">{activeData.lastUpdated}</span>
