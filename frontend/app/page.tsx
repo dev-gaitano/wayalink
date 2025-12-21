@@ -2,7 +2,9 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { useRef, useEffect, useState } from "react"
 import useSWR from "swr"
 import { Package, Truck, Warehouse, BarChart3, MapPin, User, Clock, TrendingUp, AlertCircle, RefreshCw } from "lucide-react"
 
@@ -18,9 +20,71 @@ type LogisticsData = {
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function LogisticsDashboard() {
+  const containerRef = useRef(null);
   const [activeSection, setActiveSection] = useState<string>("shipments")
-  const [searchQuery, setSearchQuery] = useState("")
   const [isRefreshing, setIsRefreshing] = useState(false)
+
+  useEffect(() => {
+    const sceneContainer = containerRef.current;
+
+    // Scene setup
+    const scene = new THREE.Scene();
+
+    // Camera setup
+    const fov = 75;
+    const aspectRatio = window.innerWidth / window.innerHeight;
+    const clippingPlane = [1, 1000]
+    const camera = new THREE.PerspectiveCamera(fov, aspectRatio, clippingPlane[0], clippingPlane[1]);
+    camera.position.set(0, 0.2, 8);
+
+    // Renderer setup
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    sceneContainer.appendChild(renderer.domElement);
+
+    // Lighting setup
+    const lightColor = 0xFFFFFF;
+
+    const ambientLightIntensity = 0.1;
+    const ambientLight = new THREE.AmbientLight(lightColor, ambientLightIntensity)
+
+    const directionalLightIntensity = 5;
+    const directionalLight = new THREE.DirectionalLight(lightColor, directionalLightIntensity)
+    directionalLight.position.set(-3, 0, 5);
+    directionalLight.target.position.set(0, 0, 5);
+
+    scene.add(directionalLight.target);
+    scene.add(directionalLight);
+    scene.add(ambientLight);
+
+    // Mesh setup
+    let loadedMesh: THREE.Object3D = null;
+
+    const loader = new GLTFLoader();
+    loader.load('/blob.gltf', function(gltf: THREE.Object3D) {
+      loadedMesh = gltf.scene;
+      scene.add(loadedMesh)
+    })
+
+    // Animation and rendering
+    function animate() {
+      if (loadedMesh) {
+        loadedMesh.rotation.x += 0.01;
+        loadedMesh.rotation.y += 0.01;
+        loadedMesh.rotation.z += 0.01;
+      }
+      renderer.render(scene, camera);
+    }
+
+    renderer.setAnimationLoop(animate);
+
+    // Cleanup scene to avoid duplication
+    return () => {
+      renderer.setAnimationLoop(null);
+      sceneContainer?.removeChild(renderer.domElement);
+    };
+  }, [])
+
 
   const { data: shipmentsData, mutate: mutateShipments } = useSWR<LogisticsData>("/api/dashboard/shipments", fetcher, {
     refreshInterval: 5000,
@@ -83,6 +147,7 @@ export default function LogisticsDashboard() {
 
   return (
     <div className="dashboard-container">
+      <div ref={containerRef} className="blobs-container"></div>
       <div className="dashboard-card">
         <div className="dashboard-grid">
           {/* Left Sidebar Navigation */}
@@ -131,7 +196,7 @@ export default function LogisticsDashboard() {
             <header className="main-header">
               <div className="header-left">
                 <div className="status-indicator">
-                  <div className="orange-dot" />
+                  <div className="orange-dot pulsing" />
                   <span className="brand-name">WAYALINK</span>
                 </div>
               </div>
@@ -208,7 +273,7 @@ export default function LogisticsDashboard() {
                     <div className="status-indicators">
                       <div className="status-row">
                         <span className="status-label">Status</span>
-                        <div className="status-dot" />
+                        <div className="status-dot pulsing" />
                       </div>
                       <div className="status-row">
                         <span className="status-label">{activeData.lastUpdated}</span>

@@ -12,10 +12,10 @@ from databaseConnection import db_connection
 random.seed(42)
 
 # Data configuration
-NUM_LOCATIONS = 50
-NUM_ROUTES = 36
-NUM_FLEETS = 28
-NUM_USERS = 43
+NUM_LOCATIONS = 113
+NUM_ROUTES = 90
+NUM_FLEETS = 156
+NUM_USERS = 359
 NUM_SHIPMENTS = 2687
 
 # Kenyan regions and their major towns
