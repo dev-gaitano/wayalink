@@ -1,118 +1,23 @@
 @import 'tw-animate-css';
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+
+@font-face {
+  font-family: "0xProto Nerd Font";
+  src: url("/fonts/0xProtoNerdFont-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --background: hsl(0, 0%, 98%);
   --foreground: hsl(0, 0%, 15%);
-  --card: hsl(0, 0%, 98%);
-  --card-foreground: hsl(0, 0%, 15%);
-  --popover: hsl(0, 0%, 98%);
-  --popover-foreground: hsl(0, 0%, 15%);
-  --primary: hsl(14, 100%, 53%);
-  --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(60, 5%, 92%);
-  --secondary-foreground: hsl(0, 0%, 15%);
-  --muted: hsl(60, 5%, 95%);
-  --muted-foreground: hsl(0, 0%, 50%);
-  --accent: hsl(14, 100%, 53%);
-  --accent-foreground: hsl(0, 0%, 100%);
-  --destructive: hsl(0, 84%, 60%);
-  --destructive-foreground: hsl(0, 0%, 100%);
   --border: hsl(0, 0%, 90%);
-  --input: hsl(0, 0%, 90%);
   --ring: hsl(14, 100%, 53%);
-  --chart-1: hsl(14, 100%, 53%);
-  --chart-2: hsl(221, 83%, 53%);
-  --chart-3: hsl(142, 76%, 36%);
-  --chart-4: hsl(45, 93%, 47%);
-  --chart-5: hsl(280, 65%, 60%);
-  --radius: 0.75rem;
-  --sidebar: hsl(0, 0%, 96%);
-  --sidebar-foreground: hsl(0, 0%, 15%);
-  --sidebar-primary: hsl(14, 100%, 53%);
-  --sidebar-primary-foreground: hsl(0, 0%, 100%);
-  --sidebar-accent: hsl(60, 5%, 92%);
-  --sidebar-accent-foreground: hsl(0, 0%, 15%);
-  --sidebar-border: hsl(0, 0%, 90%);
-  --sidebar-ring: hsl(14, 100%, 53%);
+  --font-sans: "0xProto Nerd Font", monospace;
 }
 
-.dark {
-  --background: hsl(220, 13%, 9%);
-  --foreground: hsl(0, 0%, 95%);
-  --card: hsl(220, 13%, 13%);
-  --card-foreground: hsl(0, 0%, 95%);
-  --popover: hsl(220, 13%, 9%);
-  --popover-foreground: hsl(0, 0%, 95%);
-  --primary: hsl(14, 100%, 63%);
-  --primary-foreground: hsl(220, 13%, 9%);
-  --secondary: hsl(220, 13%, 18%);
-  --secondary-foreground: hsl(0, 0%, 95%);
-  --muted: hsl(220, 13%, 18%);
-  --muted-foreground: hsl(0, 0%, 63%);
-  --accent: hsl(14, 100%, 63%);
-  --accent-foreground: hsl(0, 0%, 95%);
-  --destructive: hsl(0, 63%, 50%);
-  --destructive-foreground: hsl(0, 0%, 95%);
-  --border: hsl(220, 13%, 20%);
-  --input: hsl(220, 13%, 20%);
-  --ring: hsl(14, 100%, 63%);
-  --chart-1: hsl(14, 100%, 63%);
-  --chart-2: hsl(221, 83%, 63%);
-  --chart-3: hsl(142, 76%, 46%);
-  --chart-4: hsl(45, 93%, 57%);
-  --chart-5: hsl(280, 65%, 70%);
-  --sidebar: hsl(220, 13%, 12%);
-  --sidebar-foreground: hsl(0, 0%, 95%);
-  --sidebar-primary: hsl(14, 100%, 63%);
-  --sidebar-primary-foreground: hsl(0, 0%, 95%);
-  --sidebar-accent: hsl(220, 13%, 18%);
-  --sidebar-accent-foreground: hsl(0, 0%, 95%);
-  --sidebar-border: hsl(220, 13%, 20%);
-  --sidebar-ring: hsl(14, 100%, 63%);
-}
-
-@theme inline {
-  --font-sans: "Geist", "Geist Fallback";
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
-
-/* Base Styles with Vanilla CSS */
 * {
   border-color: var(--border);
   outline-color: hsla(var(--ring) / 0.5);
@@ -126,6 +31,23 @@ body {
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Bebas Neue", sans-serif;
+  font-style: normal;
+}
+
+.sub-h {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
 }
 
 /* Dashboard Container Styles */
@@ -410,18 +332,21 @@ body {
   position: absolute;
   inset: 0;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
+  padding-right: 200px;
   z-index: 25;
   pointer-events: none;
 }
 
 .overlay-text-content {
-  font-size: 16rem;
+  font-size: 320px;
+  letter-spacing: 0.08em;
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.02);
   line-height: 1;
   user-select: none;
+  position: relative;
 }
 
 /* Central Panel */
@@ -456,15 +381,15 @@ body {
 }
 
 .panel-prefix {
+  font-weight: 500;
   font-size: 1.25rem;
-  font-weight: 300;
-  color: #e5e7eb;
+  color: rgba(255, 255, 255, 0.75);
   margin-bottom: 0.2rem;
 }
 
 .panel-title {
-  font-size: 2.25rem;
-  font-weight: 800;
+  font-size: 48px;
+  font-weight: 900;
   color: white;
 }
 
@@ -561,14 +486,14 @@ body {
 .refresh-button {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
   padding: 0.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  transition: color 0.3s ease;
+  transition: color 0.4s ease;
 }
 
 .refresh-button:hover {
@@ -599,31 +524,6 @@ body {
   }
 }
 
-/* Search Form */
-.search-form {
-  position: relative;
-}
-
-.search-input {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-  color: white;
-  font-size: 0.875rem;
-  padding: 0.5rem 0.5rem 0.25rem;
-  width: 8rem;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-.search-input:focus {
-  border-bottom-color: white;
-}
-
-.search-input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
 .content-right {
   display: flex;
   flex-direction: column;
@@ -638,10 +538,12 @@ body {
 }
 
 .stat-number {
-  font-size: 8rem;
+  display: flex;
+  justify-content: flex-end;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 148px;
   font-weight: 900;
   line-height: 1;
-  margin-bottom: 2rem;
 }
 
 .stat-unit-container {
@@ -653,6 +555,7 @@ body {
 }
 
 .stat-unit {
+  color: rgba(255, 255, 255, 0.75);
   font-size: 0.875rem;
   letter-spacing: 0.1em;
 }
