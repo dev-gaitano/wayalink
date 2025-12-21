@@ -19,6 +19,27 @@ type LogisticsData = {
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
+const formatLastUpdated = (iso: string | undefined): string => {
+  // Check if ISO string is available
+  if (!iso) return "Never"
+
+  // Calculate seconds
+  const seconds = Math.floor((Date.now() - new Date(iso).getTime()) / 1000)
+  if (seconds < 10) return "Just now"
+  if (seconds < 60) return `${seconds}s`
+
+  // Calculate minutes
+  const minutes = Math.floor(seconds / 60)
+  if (minutes < 60) return `${minutes}m`
+
+  // Calculate hours
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return `${hours}h`
+
+  // Calculate days
+  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+}
+
 export default function LogisticsDashboard() {
   const containerRef = useRef(null);
   const [activeSection, setActiveSection] = useState<string>("shipments")
@@ -173,7 +194,7 @@ export default function LogisticsDashboard() {
                   <button
                     key={item.id}
                     onClick={() => setActiveSection(item.id)}
-                    className={`nav-button ${isActive ? 'active' : ''}`}
+                    className={`nav-button sub-h ${isActive ? 'active' : ''}`}
                   >
                     <span className="nav-number">{item.number}</span>
                     <Icon className="nav-icon" />
@@ -213,7 +234,7 @@ export default function LogisticsDashboard() {
 
               {/* Animated Overlay Text */}
               <div className="overlay-text">
-                <div className="overlay-text-content">LIVE</div>
+                <h3 className="overlay-text-content">LIVE</h3>
               </div>
 
               {/* Central Glassmorphic Panel */}
@@ -221,7 +242,7 @@ export default function LogisticsDashboard() {
                 <div className="central-panel">
                   <div className="central-panel-div-1">
                     <div className="central-panel-header">
-                      <p className="panel-prefix">{activeData.prefix}</p>
+                      <p className="panel-prefix sub-h">{activeData.prefix}</p>
                       <h2 className="panel-title">{activeData.title}</h2>
                     </div>
                     <div className="metrics-grid">
@@ -253,7 +274,7 @@ export default function LogisticsDashboard() {
                     <button
                       onClick={handleRefresh}
                       disabled={isRefreshing}
-                      className="refresh-button"
+                      className="refresh-button sub-h"
                     >
                       <RefreshCw className={`refresh-icon ${isRefreshing ? 'spinning' : ''}`} />
                       Refresh
@@ -264,7 +285,7 @@ export default function LogisticsDashboard() {
                     <div className="stats-container">
                       <div className="stat-number">{activeData.stat}</div>
                       <div className="stat-unit-container">
-                        <div className="stat-unit">{activeData.unit}</div>
+                        <div className="stat-unit sub-h">{activeData.unit}</div>
                         <AlertCircle onClick={handleMonitor} className="monitor-button" />
                       </div>
                     </div>
@@ -276,7 +297,7 @@ export default function LogisticsDashboard() {
                         <div className="status-dot pulsing" />
                       </div>
                       <div className="status-row">
-                        <span className="status-label">{activeData.lastUpdated}</span>
+                        <span className="status-label">{formatLastUpdated(activeData.lastUpdated)}</span>
                         <Clock className="live-icon" />
                       </div>
                     </div>
