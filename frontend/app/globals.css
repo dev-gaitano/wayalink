@@ -58,19 +58,86 @@ h6 {
   align-items: center;
   justify-content: center;
   padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
 }
 
-.blobs-container {
+.grid-pattern {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg,
+      transparent,
+      transparent 19px,
+      rgba(255, 255, 255, 0.03) 19px,
+      rgba(255, 255, 255, 0.1) 20px),
+    repeating-linear-gradient(90deg,
+      transparent,
+      transparent 19px,
+      rgba(255, 255, 255, 0.03) 19px,
+      rgba(255, 255, 255, 0.1) 20px),
+    repeating-linear-gradient(0deg,
+      transparent,
+      transparent 99px,
+      rgba(255, 255, 255, 0.08) 99px,
+      rgba(255, 255, 255, 0.1) 100px),
+    repeating-linear-gradient(90deg,
+      transparent,
+      transparent 99px,
+      rgba(255, 255, 255, 0.08) 99px,
+      rgba(255, 255, 255, 0.1) 100px);
+  background-position: center;
+  mix-blend-mode: screen;
+}
+
+.diagonal-lines {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-  filter: blur(180px);
+  right: 0;
+  bottom: 0;
 }
 
+.diagonal-line {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  height: 1px;
+  transform-origin: top left;
+}
+
+.diagonal-45 {
+  width: 141.4%;
+  transform: rotate(45deg);
+  top: 0;
+  left: 0;
+}
+
+.diagonal-neg-45 {
+  width: 141.4%;
+  transform: rotate(-45deg);
+  transform-origin: top right;
+  top: 40%;
+  right: 0;
+}
+
+.diagonal-30 {
+  width: 115.5%;
+  transform: rotate(30deg);
+  top: 0;
+  left: 0;
+}
+
+.diagonal-60 {
+  width: 115.5%;
+  transform: rotate(60deg);
+  top: 0;
+  left: 0;
+}
+
+/* Dashboad Card */
 .dashboard-card {
   z-index: 10;
   width: 100%;
@@ -82,17 +149,12 @@ h6 {
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  height: 100%;
+  display: flex;
 }
 
 /* Sidebar Styles */
 .sidebar {
-  grid-column: span 3;
+  width: 20%;
   background-color: #e5e5e5;
   padding: 1.5rem;
   display: flex;
@@ -102,7 +164,7 @@ h6 {
   z-index: 20;
 }
 
-.sidebar-header {
+.header-sidebar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -231,32 +293,11 @@ h6 {
 
 /* Main Content Area */
 .main-content {
-  grid-column: span 9;
   position: relative;
-  display: flex;
-  flex-direction: column;
+  flex-grow: 1;
 }
 
 /* Header Styles */
-.main-header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 30;
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: rgba(255, 255, 255, 0.8);
-}
-
 .status-indicator {
   display: flex;
   align-items: center;
@@ -293,40 +334,6 @@ h6 {
   }
 }
 
-.brand-name {
-  letter-spacing: 0.1em;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-/* Dashboard Content */
-.dashboard-content {
-  flex-grow: 1;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Orange Background Block */
-.orange-block {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 33.333333%;
-  background-color: #ff6b35;
-  z-index: 10;
-}
-
-/* Background Pattern */
-.background-pattern {
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-  opacity: 0.2;
-  background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.25) 1px, transparent 0);
-  background-size: 32px 32px;
-}
-
 /* Animated Overlay Text */
 .overlay-text {
   position: absolute;
@@ -349,15 +356,57 @@ h6 {
   position: relative;
 }
 
-/* Central Panel */
+/* Central Dashboard */
+.central-dashboard-container {
+  position: relative;
+  height: 100%;
+  width: 60%;
+}
+
+.background-pattern {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 20;
+  opacity: 0.2;
+  background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.25) 1px, transparent 0);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+.blobs-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: blur(180px);
+}
+
+.header-main {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 30;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.brand-name {
+  letter-spacing: 0.1em;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
 .central-panel {
   position: absolute;
+  top: 50%;
+  border: solid 1px red;
   z-index: 40;
   padding: 2rem;
-  width: 50%;
+  width: 80%;
   height: 28%;
-  top: 50%;
-  left: 0;
   transform: translateY(-50%);
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(24px);
@@ -441,7 +490,7 @@ h6 {
   position: absolute;
   z-index: 40;
   padding: 2rem;
-  width: 50%;
+  width: 80%;
   height: 28%;
   top: 50%;
   left: 0;
@@ -466,14 +515,15 @@ h6 {
   right: 0;
   top: 0;
   bottom: 0;
-  width: 33.333333%;
+  width: 30%;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
   color: white;
-  z-index: 30;
+  z-index: 10;
+  background-color: #ff6b35;
 }
 
 .header-right {
