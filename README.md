@@ -7,29 +7,6 @@
 <br />
 <br />
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#project-demo">Project Demo</a></li>
-        <li><a href="#project-structure">Project Structure</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ol>
-</details>
-
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
@@ -239,66 +216,6 @@ Welcome to WayaLink
    - Destination location
    - Current status
 
-<!-- TROUBLESHOOTING -->
-
-## Troubleshooting
-
-### Common Issues
-
-**1. Database Connection Error**
-
-```
-Error: FATAL: database "wayalink" does not exist
-```
-
-**Solution**: Create the database first:
-
-```sh
-psql -U your_postgres_username -c "CREATE DATABASE wayalink;"
-```
-
-**2. Africa's Talking Webhook Error**
-
-```
-Error: User not registered. Please contact support.
-```
-
-**Solution**: Ensure the phone number exists in the `users` table. Use one of the seeded phone numbers.
-
-**3. ngrok Session Expired**
-**Solution**: Restart ngrok and update the Africa's Talking webhook URL with the new ngrok URL.
-
-**4. Import Error for psycopg2**
-
-```
-Error: No module named 'psycopg2'
-```
-
-**Solution**: Install PostgreSQL development libraries:
-
-```sh
-# Ubuntu/Debian
-sudo apt-get install libpq-dev
-
-# macOS
-brew install postgresql
-
-# Then reinstall
-pip install psycopg2
-```
-
-**5. Port Already in Use**
-
-```
-Error: Address already in use
-```
-
-**Solution**: Change the Flask port in `main.py`:
-
-```python
-app.run(debug=True, port=5001)
-```
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- DEVELOPMENT -->
@@ -323,22 +240,6 @@ app.run(debug=True, port=5001)
 - **users**: Registered workers tied to locations
 - **shipments**: Master tracking records
 - **shipment_events**: Immutable audit log
-
-### Adding New Features
-
-1. **Add New Status Options**: Update the `status_map` dictionary in `main.py`
-2. **Add New Locations**: Insert into `locations` table
-3. **Register New Users**: Insert into `users` table with phone number and location
-
-### Running Tests
-
-```sh
-# Run the Flask app in debug mode
-python3 main.py
-
-# Use the Africa's Talking USSD simulator
-# Test all menu flows
-```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
