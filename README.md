@@ -7,29 +7,6 @@
 <br />
 <br />
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#project-demo">Project Demo</a></li>
-        <li><a href="#project-structure">Project Structure</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ol>
-</details>
-
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
@@ -54,8 +31,10 @@ wayalink/
 ├── frontend                # Front-end files directory 
 ├── database.sql            # Database schema creation script
 ├── databaseConnection.py   # Database connection configuration
+├── Dockerfile              # Deployment container
 ├── frontendApi.py          # Back-end to Front-end data API
 ├── main.py                 # Main Flask application
+├── Procfile                # Railway connection
 ├── README.md               # Project documentation
 ├── requirements.txt        # Python dependencies
 └── seed_data.py            # Database seeding script
@@ -67,11 +46,7 @@ wayalink/
 
 ## Getting Started
 
-Follow these steps to set up WayaLink locally.
-
-### Prerequisites
-
-Ensure you have the following installed:
+Follow these steps to set up WayaLink locally and ensure you have the following installed:
 
 - **Python 3.8+**
 - **pip** (Python package installer)
@@ -81,27 +56,22 @@ Ensure you have the following installed:
 
 ### Installation
 
-#### Step 1: Clone the Repository
+#### Step 1: Clone the Repository and setup Virtual Environment
 
 ```sh
 git clone git@github.com:dev-gaitano/wayalink.git
 cd wayalink
-```
-
-#### Step 2: Set Up Virtual Environment
-
-```sh
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-#### Step 3: Install Dependencies
+#### Step 2: Install Dependencies
 
 ```sh
 pip install -r requirements.txt
 ```
 
-#### Step 4: Configure Environment Variables
+#### Step 3: Configure Environment Variables
 
 Create a `.env` file in the root directory:
 
@@ -126,7 +96,7 @@ AT_API_KEY=your_africastalking_api_key
 
 **Note**: Get your Africa's Talking credentials from [https://africastalking.com/](https://africastalking.com/)
 
-#### Step 5: Set Up PostgreSQL Database
+#### Step 4: Set Up PostgreSQL Database
 
 Create the database:
 
@@ -147,7 +117,7 @@ Run the database schema script:
 psql -U your_postgres_username -d wayalink -f database.sql
 ```
 
-#### Step 6: Seed the Database
+#### Step 5: Seed the Database
 
 Populate the database with test data:
 
@@ -161,7 +131,7 @@ This will create:
 - 26 test users
 - 20 sample shipments
 
-#### Step 7: Start the Flask Application
+#### Step 6: Start the Flask Application
 
 ```sh
 python3 main.py
@@ -169,7 +139,7 @@ python3 main.py
 
 The application will start on `http://localhost:5000`
 
-#### Step 8: Expose Local Server with ngrok
+#### Step 7: Expose Local Server with ngrok
 
 In a new terminal window:
 
@@ -179,7 +149,7 @@ ngrok http 5000
 
 Copy the HTTPS forwarding URL (e.g., `https://abc123.ngrok.io`)
 
-#### Step 9: Configure Africa's Talking Webhook
+#### Step 8: Configure Africa's Talking Webhook
 
 1. Log in to your [Africa's Talking account](https://account.africastalking.com/)
 2. Navigate to **USSD** → **Create Channel**
@@ -239,66 +209,6 @@ Welcome to WayaLink
    - Destination location
    - Current status
 
-<!-- TROUBLESHOOTING -->
-
-## Troubleshooting
-
-### Common Issues
-
-**1. Database Connection Error**
-
-```
-Error: FATAL: database "wayalink" does not exist
-```
-
-**Solution**: Create the database first:
-
-```sh
-psql -U your_postgres_username -c "CREATE DATABASE wayalink;"
-```
-
-**2. Africa's Talking Webhook Error**
-
-```
-Error: User not registered. Please contact support.
-```
-
-**Solution**: Ensure the phone number exists in the `users` table. Use one of the seeded phone numbers.
-
-**3. ngrok Session Expired**
-**Solution**: Restart ngrok and update the Africa's Talking webhook URL with the new ngrok URL.
-
-**4. Import Error for psycopg2**
-
-```
-Error: No module named 'psycopg2'
-```
-
-**Solution**: Install PostgreSQL development libraries:
-
-```sh
-# Ubuntu/Debian
-sudo apt-get install libpq-dev
-
-# macOS
-brew install postgresql
-
-# Then reinstall
-pip install psycopg2
-```
-
-**5. Port Already in Use**
-
-```
-Error: Address already in use
-```
-
-**Solution**: Change the Flask port in `main.py`:
-
-```python
-app.run(debug=True, port=5001)
-```
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- DEVELOPMENT -->
@@ -324,30 +234,6 @@ app.run(debug=True, port=5001)
 - **shipments**: Master tracking records
 - **shipment_events**: Immutable audit log
 
-### Adding New Features
-
-1. **Add New Status Options**: Update the `status_map` dictionary in `main.py`
-2. **Add New Locations**: Insert into `locations` table
-3. **Register New Users**: Insert into `users` table with phone number and location
-
-### Running Tests
-
-```sh
-# Run the Flask app in debug mode
-python3 main.py
-
-# Use the Africa's Talking USSD simulator
-# Test all menu flows
-```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- LICENSE -->
-
-## License
-
-This project is part of the WUD Africa AI Hackathon 2025.
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
@@ -358,7 +244,8 @@ This project is part of the WUD Africa AI Hackathon 2025.
 **Ian Njenga** - iank.njenga@gmail.com  
 **Nurhan Garang** - garangnurhan57@gmail.com
 
-<br />
+This project is part of the WUD Africa AI Hackathon 2025.
+
 <br />
 
 <div align="center">
