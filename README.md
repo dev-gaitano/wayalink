@@ -31,8 +31,10 @@ wayalink/
 ├── frontend                # Front-end files directory 
 ├── database.sql            # Database schema creation script
 ├── databaseConnection.py   # Database connection configuration
+├── Dockerfile              # Deployment container
 ├── frontendApi.py          # Back-end to Front-end data API
 ├── main.py                 # Main Flask application
+├── Procfile                # Railway connection
 ├── README.md               # Project documentation
 ├── requirements.txt        # Python dependencies
 └── seed_data.py            # Database seeding script
@@ -44,11 +46,7 @@ wayalink/
 
 ## Getting Started
 
-Follow these steps to set up WayaLink locally.
-
-### Prerequisites
-
-Ensure you have the following installed:
+Follow these steps to set up WayaLink locally and ensure you have the following installed:
 
 - **Python 3.8+**
 - **pip** (Python package installer)
@@ -58,27 +56,22 @@ Ensure you have the following installed:
 
 ### Installation
 
-#### Step 1: Clone the Repository
+#### Step 1: Clone the Repository and setup Virtual Environment
 
 ```sh
 git clone git@github.com:dev-gaitano/wayalink.git
 cd wayalink
-```
-
-#### Step 2: Set Up Virtual Environment
-
-```sh
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-#### Step 3: Install Dependencies
+#### Step 2: Install Dependencies
 
 ```sh
 pip install -r requirements.txt
 ```
 
-#### Step 4: Configure Environment Variables
+#### Step 3: Configure Environment Variables
 
 Create a `.env` file in the root directory:
 
@@ -103,7 +96,7 @@ AT_API_KEY=your_africastalking_api_key
 
 **Note**: Get your Africa's Talking credentials from [https://africastalking.com/](https://africastalking.com/)
 
-#### Step 5: Set Up PostgreSQL Database
+#### Step 4: Set Up PostgreSQL Database
 
 Create the database:
 
@@ -124,7 +117,7 @@ Run the database schema script:
 psql -U your_postgres_username -d wayalink -f database.sql
 ```
 
-#### Step 6: Seed the Database
+#### Step 5: Seed the Database
 
 Populate the database with test data:
 
@@ -138,7 +131,7 @@ This will create:
 - 26 test users
 - 20 sample shipments
 
-#### Step 7: Start the Flask Application
+#### Step 6: Start the Flask Application
 
 ```sh
 python3 main.py
@@ -146,7 +139,7 @@ python3 main.py
 
 The application will start on `http://localhost:5000`
 
-#### Step 8: Expose Local Server with ngrok
+#### Step 7: Expose Local Server with ngrok
 
 In a new terminal window:
 
@@ -156,7 +149,7 @@ ngrok http 5000
 
 Copy the HTTPS forwarding URL (e.g., `https://abc123.ngrok.io`)
 
-#### Step 9: Configure Africa's Talking Webhook
+#### Step 8: Configure Africa's Talking Webhook
 
 1. Log in to your [Africa's Talking account](https://account.africastalking.com/)
 2. Navigate to **USSD** → **Create Channel**
