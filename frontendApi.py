@@ -39,7 +39,7 @@ def active_shipments():
 
     # Calculate Avg. Delivery time
     # Sum of all delivered shipments times in hours
-    cursor.execute("""SELECT SUM(EXTRACT(EPOCH FROM s.actual_delivery - s.created_at) / 3600) AS total_hours
+    cursor.execute("""SELECT SUM(EXTRACT(EPOCH FROM s.delivery_time - s.created_at) / 3600) AS total_hours
                    FROM shipments s
                    JOIN (
                        SELECT DISTINCT ON (tracking_code) tracking_code, status
@@ -216,6 +216,8 @@ def route_optimization():
             }
 
     return route_optimization_data
+
+
 
 # =====================================================
 # DETAILS
