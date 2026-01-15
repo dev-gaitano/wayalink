@@ -29,7 +29,6 @@ wayalink/
 ├── .git/                   # Git repository data
 ├── .gitignore              # Git ignore rules
 ├── frontend                # Front-end files directory 
-├── database.sql            # Database schema creation script
 ├── databaseConnection.py   # Database connection configuration
 ├── Dockerfile              # Deployment container
 ├── frontendApi.py          # Back-end to Front-end data API
@@ -37,7 +36,7 @@ wayalink/
 ├── Procfile                # Railway connection
 ├── README.md               # Project documentation
 ├── requirements.txt        # Python dependencies
-└── seed_data.py            # Database seeding script
+└── schema.sql              # Database schema creation script
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -114,24 +113,10 @@ CREATE DATABASE wayalink;
 Run the database schema script:
 
 ```sh
-psql -U your_postgres_username -d wayalink -f database.sql
+psql -U your_postgres_username -d wayalink -f schema.sql
 ```
 
-#### Step 5: Seed the Database
-
-Populate the database with test data:
-
-```sh
-python3 seed_data.py
-```
-
-This will create:
-
-- 7 locations (manufacturers, warehouses, retailers)
-- 26 test users
-- 20 sample shipments
-
-#### Step 6: Start the Flask Application
+#### Step 5: Start the Flask Application
 
 ```sh
 python3 main.py
@@ -139,7 +124,7 @@ python3 main.py
 
 The application will start on `http://localhost:5000`
 
-#### Step 7: Expose Local Server with ngrok
+#### Step 6: Expose Local Server with ngrok
 
 In a new terminal window:
 
@@ -173,7 +158,7 @@ Copy the HTTPS forwarding URL (e.g., `https://abc123.ngrok.io`)
 
 #### Option 2: Using a Real Phone (Production)
 
-1. Dial your USSD code (e.g., `*384*96#`)
+1. Dial your USSD code (e.g., `*123#`)
 2. Follow the menu prompts
 
 ### USSD Menu Flow
@@ -208,31 +193,6 @@ Welcome to WayaLink
    - Origin location
    - Destination location
    - Current status
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- DEVELOPMENT -->
-
-## Development
-
-### Project Architecture
-
-**Frontend**: Typescript  
-**Backend**: Python  
-**Database**: PostgreSQL  
-**USSD Gateway**: Africa's Talking  
-**Authentication**: Phone number-based
-
-### Database Schema
-
-<div align="center">
-    <img src="https://res.cloudinary.com/diwkfbsgv/image/upload/v1762835675/database_design_ss2cxw.png" alt="banner_img">
-</div>
-
-- **locations**: Physical supply chain nodes
-- **users**: Registered workers tied to locations
-- **shipments**: Master tracking records
-- **shipment_events**: Immutable audit log
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
