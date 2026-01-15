@@ -113,7 +113,7 @@ CREATE DATABASE wayalink;
 Run the database schema script:
 
 ```sh
-psql -U your_postgres_username -d wayalink -f database.sql
+psql -U your_postgres_username -d wayalink -f schema.sql
 ```
 
 #### Step 5: Start the Flask Application
