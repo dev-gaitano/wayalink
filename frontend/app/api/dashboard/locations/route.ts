@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic"
 export async function GET() {
   // Fetch data from API
   const req = await fetch(
-    "https://wayalink-production.up.railway.app/api/dashboard/location_network",
+    "https://wayalink-api.onrender.com/api/dashboard/location_network",
     { cache: "no-store" }
   )
 

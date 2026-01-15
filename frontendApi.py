@@ -11,7 +11,7 @@ app = Flask(__name__)
 # DASHBOARD
 # =====================================================
 
-# fetch that data from Database
+# Active Shipments
 @app.route("/api/dashboard/active_shipments", methods=["GET"])
 def active_shipments():
     conn = db_connection()
@@ -200,7 +200,11 @@ def route_optimization():
                    """)
     rows = cursor.fetchone()
     sum_of_distances = rows[0] if rows else 0
-    avg_distance = sum_of_distances / total_routes
+
+    if sum_of_distances is not 0:
+        avg_distance = sum_of_distances / total_routes
+    else:
+        avg_distance = 0
 
     # Fetch average Stops
     cursor.execute("SELECT COUNT(*) FROM route_stops")
