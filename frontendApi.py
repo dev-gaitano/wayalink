@@ -201,10 +201,7 @@ def route_optimization():
     rows = cursor.fetchone()
     sum_of_distances = rows[0] if rows else 0
 
-    if sum_of_distances is not 0:
-        avg_distance = sum_of_distances / total_routes
-    else:
-        avg_distance = 0
+    avg_distance = sum_of_distances / total_routes
 
     # Fetch average Stops
     cursor.execute("SELECT COUNT(*) FROM route_stops")
