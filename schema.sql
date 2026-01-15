@@ -59,12 +59,16 @@ CREATE TABLE IF NOT EXISTS clients (
 CREATE TABLE IF NOT EXISTS fleets (
 	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	company_id UUID REFERENCES companies(id) NOT NULL,
-	type VARCHAR(5) NOT NULL,
+	type VARCHAR(5) NOT NULL CHECK (
+		type IN ('Truck', 'Pickup', 'Van', 'Trailer')
+	),
 	model VARCHAR(100) NOT NULL,
 	year_of_manufacture INT NOT NULL,
 	number_plate VARCHAR(10) NOT NULL,
 	mileage_km INT,
-	status VARCHAR(8) NOT NULL,
+	status VARCHAR(8) NOT NULL DEFAULT 'Available' CHECK (
+		status IN ('In Transit', 'Available', 'In Maintenance', 'Retired')
+	),
 	last_maitenance TIMESTAMP,
 	location_id UUID REFERENCES locations(id) NOT NULL,
 	created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
@@ -93,13 +97,15 @@ CREATE TABLE IF NOT EXISTS route_stops (
 CREATE TABLE IF NOT EXISTS shipments (
 	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	company_id UUID REFERENCES companies(id) NOT NULL,
-	tracking_code VARCHAR(15) NOT NULL,
+	tracking_code VARCHAR(15) UNIQUE NOT NULL,
 	route_id UUID REFERENCES routes(id) NOT NULL,
 	fleet_id UUID REFERENCES fleets(id) NOT NULL,
 	driver_id UUID REFERENCES users(id) NOT NULL,
 	customer_id UUID REFERENCES clients(id) NOT NULL,
 	description TEXT,
-	priority VARCHAR(6),
+	priority VARCHAR(6) DEFAULT 'normal' CHECK (
+		priority IN ('low', 'normal', 'high', 'urgent')
+	),
 	delivery_time TIMESTAMP,
 	last_update TIMESTAMP,
 	created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
@@ -111,7 +117,18 @@ CREATE TABLE IF NOT EXISTS shipment_events (
 	tracking_code VARCHAR(15) REFERENCES shipments(tracking_code) NOT NULL,
 	recorded_by UUID REFERENCES users(id) NOT NULL,
 	location_id UUID REFERENCES locations(id) NOT NULL,
-	status VARCHAR(8),
+	status VARCHAR(8) NOT NULL CHECK (
+		status IN (
+		    'created',
+		    'picked_up',
+		    'in_transit',
+		    'at_stop',
+		    'delayed',
+		    'delivered',
+		    'cancelled',
+		    'failed'
+		)
+	),
 	notes TEXT,
 	created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
 );
