@@ -1,11 +1,146 @@
-from flask import Flask
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from databaseConnection import db_connection
 import os
 from dotenv import load_dotenv
+import bcrypt
 
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
+
+# =====================================================
+# USER AUTH
+# =====================================================
+
+# User Email Sign Up
+@app.route("/api/signup", methods=["POST"])
+def signup():
+    conn = db_connection()
+    cursor = conn.cursor()
+
+    signup_data = request.get_json()
+    role = signup_data.get("role")
+    gender = signup_data.get("gender")
+    firstname = signup_data.get("firstname")
+    lastname = signup_data.get("lastname")
+    id_number = signup_data.get("idNumber")
+    phone_number = signup_data.get("phoneNumber")
+    signup_email = signup_data.get("signupEmail")
+    company_name = signup_data.get("companyname")
+    signup_password = signup_data.get("signupPassword")
+    confirmed_password = signup_data.get("confirmedPassword")
+
+    def is_user():
+        cursor.execute("""
+                       SELECT * FROM users WHERE email = %s 
+                       """, (signup_email,))
+        result = cursor.fetchone()
+
+        if result is None:
+            return False
+        else:
+            return True
+
+
+    def signup(signup_password, confirmed_password):
+        if signup_password == confirmed_password:
+            signup_password = bcrypt.hashpw(signup_password.encode(), bcrypt.gensalt(14))
+
+            user_exists = is_user()
+
+            if user_exists != True:
+                cursor.execute("""
+                               INSERT INTO companies (name) VALUES (%s)
+                               """, (company_name,))
+                conn.commit()
+
+                # Insert company ID 
+                # Select ID where company_name in comapnies matches user input
+                # Store ID in a variable
+                # Add variable value to users company_id column
+
+                cursor.execute("SELECT LASTVAL()")  # Gets last inserted ID
+                company_id = cursor.fetchone()[0]
+
+                # Then include it in the user insert
+                cursor.execute("""
+                    INSERT INTO users (
+                        role, gender, firstname, lastname, id_number,
+                        phone_number, email, password, company_id
+                    )
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """, (role, gender, firstname, lastname, id_number,
+                      phone_number, signup_email, signup_password, company_id))
+                conn.commit()
+
+                return {"success": True, "message": "Signup successful"}
+            else:
+                return {"success": False, "message": "User already exists"}
+
+        else:
+            return {"success": False, "message": "Passwords Do not match"}
+
+    def signupAuth():
+        signup(signup_password, confirmed_password)
+
+    cursor.close()
+    conn.close()
+
+    result = signupAuth()
+    return jsonify(result)
+
+
+# User Log In
+@app.route("/api/login", methods=["POST"])
+def login():
+    # Get user login data
+    login_data = request.get_json()
+    login_email = login_data.get("loginEmail")
+    login_password = login_data.get("loginPassword")
+
+    # Check if user is_valid_user
+    def is_user():
+        # Check if email_exists in the database
+        db_email = "dev.gaitano@gmail.com"
+
+        if login_email == db_email:
+            # If email_exists check if login_password matches
+            db_password = bcrypt.hashpw("admin123".encode(), bcrypt.gensalt(14))
+
+            if bcrypt.checkpw(login_password.encode(), db_password):
+                is_user = True
+            else:
+                is_user = False
+
+        else:
+            is_user = False
+
+        return is_user
+
+    # Check if user is_admin
+    def is_admin():
+        return True
+
+    def loginAuth():
+        user_exists = is_user()
+
+        if user_exists:
+            # Verify if is_admin
+            admin_status = is_admin()
+            if admin_status:
+                return {"success": True, "message": "Login successful"}
+            else:
+                return {"success": False, "message": "Admin access required"}
+
+        else:
+            return {"success": False, "message": "Invalid credentials"}
+
+    result = loginAuth()
+    return jsonify(result)
+
+
 
 # =====================================================
 # DASHBOARD
