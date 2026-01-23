@@ -334,7 +334,7 @@ def route_optimization():
                    FROM routes;
                    """)
     rows = cursor.fetchone()
-    sum_of_distances = rows[0] if rows else 0
+    sum_of_distances = rows[0] if (rows and rows[0] is not None) else 0
 
     avg_distance = sum_of_distances / total_routes
 
