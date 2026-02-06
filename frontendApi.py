@@ -17,79 +17,94 @@ CORS(app)
 # User Email Sign Up
 @app.route("/api/signup", methods=["POST"])
 def signup():
-    conn = db_connection()
-    cursor = conn.cursor()
+    conn = None
+    cursor = None
 
-    signup_data = request.get_json()
-    role = signup_data.get("role")
-    gender = signup_data.get("gender")
-    firstname = signup_data.get("firstname")
-    lastname = signup_data.get("lastname")
-    id_number = signup_data.get("idNumber")
-    phone_number = signup_data.get("phoneNumber")
-    signup_email = signup_data.get("signupEmail")
-    company_name = signup_data.get("companyname")
-    signup_password = signup_data.get("signupPassword")
-    confirmed_password = signup_data.get("confirmedPassword")
+    try:
+        conn = db_connection()
+        cursor = conn.cursor()
 
-    def is_user():
-        cursor.execute("""
-                       SELECT * FROM users WHERE email = %s 
-                       """, (signup_email,))
-        result = cursor.fetchone()
+        signup_data = request.get_json()
+        role = signup_data.get("role")
+        gender = signup_data.get("gender")
+        firstname = signup_data.get("firstname")
+        lastname = signup_data.get("lastname")
+        id_number = signup_data.get("idNumber")
+        phone_number = signup_data.get("phoneNumber")
+        signup_email = signup_data.get("signupEmail")
+        company_name = signup_data.get("companyname")
+        signup_password = signup_data.get("signupPassword")
+        confirmed_password = signup_data.get("confirmedPassword")
 
-        if result is None:
-            return False
-        else:
-            return True
+        def is_user():
+            cursor.execute("""
+                           SELECT * FROM users WHERE email = %s 
+                           """, (signup_email,))
+            result = cursor.fetchone()
 
-
-    def signup(signup_password, confirmed_password):
-        if signup_password == confirmed_password:
-            signup_password = bcrypt.hashpw(signup_password.encode(), bcrypt.gensalt(14))
-
-            user_exists = is_user()
-
-            if user_exists != True:
-                cursor.execute("""
-                               INSERT INTO companies (name) VALUES (%s)
-                               """, (company_name,))
-                conn.commit()
-
-                # Insert company ID 
-                # Select ID where company_name in comapnies matches user input
-                # Store ID in a variable
-                # Add variable value to users company_id column
-
-                cursor.execute("SELECT LASTVAL()")  # Gets last inserted ID
-                company_id = cursor.fetchone()[0]
-
-                # Then include it in the user insert
-                cursor.execute("""
-                    INSERT INTO users (
-                        role, gender, firstname, lastname, id_number,
-                        phone_number, email, password, company_id
-                    )
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """, (role, gender, firstname, lastname, id_number,
-                      phone_number, signup_email, signup_password, company_id))
-                conn.commit()
-
-                return {"success": True, "message": "Signup successful"}
+            if result is None:
+                return False
             else:
-                return {"success": False, "message": "User already exists"}
+                return True
 
-        else:
-            return {"success": False, "message": "Passwords Do not match"}
 
-    def signupAuth():
-        signup(signup_password, confirmed_password)
+        def signup(signup_password, confirmed_password):
+            if signup_password == confirmed_password:
+                signup_password = bcrypt.hashpw(signup_password.encode(), bcrypt.gensalt(14))
 
-    cursor.close()
-    conn.close()
+                user_exists = is_user()
 
-    result = signupAuth()
-    return jsonify(result)
+                if user_exists != True:
+                    cursor.execute("""
+                                   INSERT INTO companies (name) VALUES (%s)
+                                   """, (company_name,))
+                    conn.commit()
+
+                    # Insert company ID 
+                    # Select ID where company_name in comapnies matches user input
+                    # Store ID in a variable
+                    # Add variable value to users company_id column
+
+                    cursor.execute("""
+                                   INSERT INTO users (
+                                       role,
+                                       gender,
+                                       firstname,
+                                       lastname,
+                                       id_number,
+                                       phone_number,
+                                       email,
+                                       password
+                                       )
+                                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                                   """,
+                                   (role, gender, firstname, lastname, id_number,
+                                    phone_number, signup_email, signup_password)
+                                   )
+                    conn.commit()
+
+                    return {"success": True, "message": "Signup successful"}
+                else:
+                    return {"success": False, "message": "User already exists"}
+
+            else:
+                return {"success": False, "message": "Passwords Do not match"}
+
+        def signupAuth():
+            return signup(signup_password, confirmed_password)
+
+        result = signupAuth()
+        return jsonify(result)
+
+    except Exception as e:
+        print(e)
+        return {"success": False, "message": "There was an error Signing up"}
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 
 # User Log In
