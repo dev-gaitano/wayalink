@@ -353,34 +353,6 @@ def route_optimization():
 
     return route_optimization_data
 
-
-
-# =====================================================
-# DETAILS
-# =====================================================
-
-@app.route("/api/details/shipments", methods=["GET"])
-def shipments():
-    conn = db_connection()
-    cursor = conn.cursor()
-
-    # Fetch total shipments
-    cursor.execute("SELECT COUNT(*) FROM shipments")
-    rows = cursor.fetchone()
-    total_shipments = rows[0] if rows else 0
-        
-    cursor.close()
-    conn.close()
-
-    # Store data in a variable shipments
-    shipments_data = {
-            "total_shipments" : total_shipments,
-            }
-
-    # export data
-    return shipments_data
-
-
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5001))
     app.run(host="0.0.0.0", port=port, debug=False)

@@ -50,6 +50,10 @@ h6 {
   font-style: normal;
 }
 
+.placeholder-text {
+  color: white;
+}
+
 /* Dashboard Container Styles */
 .dashboard-container {
   min-height: 100vh;
@@ -275,6 +279,7 @@ h6 {
 /* Footer Link */
 .footer-link {
   font-size: 0.875rem;
+  text-decoration: none;
   color: #9ca3af;
   margin-top: 2.5rem;
   display: flex;
