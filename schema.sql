@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS locations (
 CREATE TABLE IF NOT EXISTS users (
 	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	company_id UUID REFERENCES companies(id) NOT NULL,
-	role VARCHAR(50) NOT NULL,
+	role VARCHAR(50) NOT NULL DEFAULT 'Admin',
 	gender VARCHAR(6),
 	firstname VARCHAR(50) NOT NULL,
 	lastname VARCHAR(50) NOT NULL,

@@ -8,7 +8,6 @@ export default function SignupPage() {
   const router = useRouter();
 
   const [gender, setGender] = useState("")
-  const [role, setRole] = useState("")
   const [firstname, setFirstname] = useState("")
   const [lastname, setLastname] = useState("")
   const [idNumber, setIdNumber] = useState("")
@@ -30,7 +29,6 @@ export default function SignupPage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            role: role,
             gender: gender,
             firstname: firstname,
             lastname: lastname,
@@ -103,22 +101,15 @@ export default function SignupPage() {
                 required
               />
               <input
-                id="input-role"
-                placeholder="Role"
-                value={role}
-                onChange={(event) => { setRole(event.target.value) }}
-                required
-              />
-            </div>
-
-            <div>
-              <input
                 id="input-id-number"
                 placeholder="ID Number"
                 value={idNumber}
                 onChange={(event) => { setIdNumber(event.target.value) }}
                 required
               />
+            </div>
+
+            <div>
               <PhoneInput
                 international
                 defaultCountry="KE"
