@@ -153,9 +153,9 @@ def login() -> Response:
         def is_admin() -> bool:
             cursor.execute("""
                            SELECT role FROM users WHERE email = %s
-                           """, (login_email))
+                           """, (login_email,))
 
-            role: tuple | None = cursor.fetchone()
+            role: tuple | None = cursor.fetchone()[0]
 
             if role == "Admin":
                 return True
@@ -166,7 +166,7 @@ def login() -> Response:
             # Check if user is_valid_user
             cursor.execute("""
                            SELECT email, password FROM users WHERE email = %s
-                           """, (login_email))
+                           """, (login_email,))
 
             user: tuple | None = cursor.fetchone()
 
@@ -208,7 +208,6 @@ def login() -> Response:
 # =====================================================
 # DASHBOARD
 # =====================================================
-
 # Active Shipments
 @app.route("/api/dashboard/active_shipments", methods=["GET"])
 def active_shipments():
