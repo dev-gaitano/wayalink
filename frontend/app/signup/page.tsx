@@ -69,7 +69,7 @@ export default function SignupPage() {
       </div>
 
       <div className="dashboard-card">
-        <div id="signup_form_container" className="flexed">
+        <div className="right-sidebar flexed">
           <form onSubmit={handleSignup}>
             <div>
               <input
@@ -170,7 +170,6 @@ export default function SignupPage() {
             <a id="link-login" href="/login" >Log in</a>
           </div>
         </div>
-        <div className="right-sidebar"></div>
       </div>
     </div>
   )
