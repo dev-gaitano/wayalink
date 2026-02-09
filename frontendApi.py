@@ -40,13 +40,14 @@ def signup() -> Response:
         signup_password: str | None = signup_data.get("signupPassword")
         confirmed_password: str | None = signup_data.get("confirmedPassword")
 
-        def is_user():
+        def is_user() -> bool:
             cursor.execute("""
                            SELECT * FROM users WHERE email = %s 
                            """, (signup_email,))
-            result = cursor.fetchone()
 
-            if result is None:
+            is_user_result: tuple | None = cursor.fetchone()
+
+            if is_user_result is None:
                 return False
             else:
                 return True
@@ -55,7 +56,7 @@ def signup() -> Response:
             if signup_password == confirmed_password:
                 signup_password = bcrypt.hashpw(signup_password.encode(), bcrypt.gensalt(14))
 
-                user_exists = is_user()
+                user_exists: bool = is_user()
 
                 if user_exists != True:
                     # Insert company ID 
@@ -69,7 +70,7 @@ def signup() -> Response:
                                    """, (company_name,))
 
                     # Store ID in a variable
-                    signup_user_company_id = cursor.fetchone()
+                    signup_user_company_id: tuple | None = cursor.fetchone()
 
                     # Add variable value to users company_id column
                     cursor.execute("""
@@ -101,10 +102,7 @@ def signup() -> Response:
             else:
                 return jsonify({"success": False, "message": "Passwords Do not match"})
 
-        def signupAuth() -> Response:
-            return process_signup(signup_password, confirmed_password)
-
-        signup_result: Response = signupAuth()
+        signup_result: Response = process_signup(signup_password, confirmed_password)
         return signup_result
 
     except Exception as e:
@@ -124,51 +122,77 @@ def signup() -> Response:
 
 # User Log In
 @app.route("/api/login", methods=["POST"])
-def login():
-    # Get user login data
-    login_data = request.get_json()
-    login_email = login_data.get("loginEmail")
-    login_password = login_data.get("loginPassword")
+def login() -> Response:
+    conn = None
+    cursor = None
 
-    # Check if user is_valid_user
-    def is_user():
-        # Check if email_exists in the database
-        db_email = "dev.gaitano@gmail.com"
+    try:
+        conn = db_connection()
+        cursor = conn.cursor()
 
-        if login_email == db_email:
-            # If email_exists check if login_password matches
-            db_password = bcrypt.hashpw("admin123".encode(), bcrypt.gensalt(14))
+        # Get user login data
+        login_data: dict[str, Any] | None = request.get_json()
 
-            if bcrypt.checkpw(login_password.encode(), db_password):
-                is_user = True
+        if not login_data:
+            return jsonify({"success": False, "message": "No JSON data provided"})
+
+        login_email: str | None = login_data.get("loginEmail")
+        login_password: str | None = login_data.get("loginPassword")
+
+        # Check if user is_admin
+        def is_admin() -> bool:
+            cursor.execute("""
+                           SELECT role FROM users WHERE email = %s
+                           """, (login_email))
+
+            role: tuple | None = cursor.fetchone()
+
+            if role == "Admin":
+                return True
             else:
-                is_user = False
+                return False
 
-        else:
-            is_user = False
+        def process_login() -> Response:
+            # Check if user is_valid_user
+            cursor.execute("""
+                           SELECT email, password FROM users WHERE email = %s
+                           """, (login_email))
 
-        return is_user
+            user: tuple | None = cursor.fetchone()
 
-    # Check if user is_admin
-    def is_admin():
-        return True
+            if not user:
+                return jsonify({"success": False, "message": "User not found"})
 
-    def loginAuth():
-        user_exists = is_user()
+            db_email, db_password = user
 
-        if user_exists:
-            # Verify if is_admin
-            admin_status = is_admin()
-            if admin_status:
-                return {"success": True, "message": "Login successful"}
+            # If login_password matches
+            if bcrypt.checkpw(login_password.encode(), db_password.encode()):
+                # Verify if is_admin
+                admin_status = is_admin()
+
+                if admin_status:
+                    return jsonify({"success": True, "message": "Login successful"})
+                else:
+                    return jsonify({"success": False, "message": "Admin access required"})
             else:
-                return {"success": False, "message": "Admin access required"}
+                return jsonify({"success": False, "message": "Invalid credentials"})
 
-        else:
-            return {"success": False, "message": "Invalid credentials"}
+        login_result: Response = process_login()
+        return login_result
 
-    result = loginAuth()
-    return jsonify(result)
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "success": False,
+            "message": "There was an error Logging in",
+            "error": str(e)
+        })
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 
 
