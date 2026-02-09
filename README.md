@@ -195,6 +195,7 @@ Welcome to WayaLink
    - Current status
 
 <br />
+<br />
 
 <div align="center">
     <p>This project is part of the WUD Africa AI Hackathon 2025.</p>
