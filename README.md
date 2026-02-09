@@ -194,13 +194,12 @@ Welcome to WayaLink
    - Destination location
    - Current status
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <br />
 
 <div align="center">
     <p>This project is part of the WUD Africa AI Hackathon 2025.</p>
     <p>Eugene Gaitano - dev.gaitano@gmail.com </p>
+    <a href="#readme-top">back to top</a>
 </div>
 
 
