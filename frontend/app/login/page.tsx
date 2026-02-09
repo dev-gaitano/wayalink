@@ -1,29 +1,52 @@
 "use client"
 
+import { useRouter } from "next/navigation";
 import React, { useState } from "react"
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   async function handleLogin(event: React.FormEvent) {
     event.preventDefault()
 
-    const res = await fetch(
-      "https://wayalink-production.up.railway.app/api/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          loginEmail: email,
-          loginPassword: password,
-        }),
-      }
-    )
+    try {
+      const res = await fetch(
+        "https://wayalink-api.onrender.com/api/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            loginEmail: email,
+            loginPassword: password,
+          }),
+        }
+      )
 
-    console.log(res)
+      // Parse the JSON response from the API
+      const data = await res.json().catch(() => (
+        { success: false, message: "Failed to parse response" }
+      ))
+      console.log("API Response:", data)
+
+      // Check if the response is ok AND if the API returned success
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}, message: ${data.message || res.statusText}`)
+      }
+
+      if (data.success === true) {
+        router.push("/home")
+      } else {
+        throw new Error(data.message)
+      }
+
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
