@@ -34,6 +34,7 @@ def signup() -> Response:
         conn = db_connection()
         cursor = conn.cursor()
 
+        # Get user signup data
         signup_data: dict[str, Any] | None = request.get_json()
 
         if not signup_data:
@@ -50,25 +51,19 @@ def signup() -> Response:
         signup_password: str | None = signup_data.get("signupPassword")
         confirmed_password: str | None = signup_data.get("confirmedPassword")
 
-        def is_user() -> bool:
-            cursor.execute("""
-                           SELECT * FROM users WHERE email = %s 
-                           """, (signup_email,))
-
-            is_user_result: tuple | None = cursor.fetchone()
-
-            if is_user_result is None:
-                return False
-            else:
-                return True
-
+        # Process user signup data
         def process_signup(signup_password, confirmed_password) -> Response:
             if signup_password == confirmed_password:
                 hashed_password = bcrypt.hashpw(signup_password.encode(), bcrypt.gensalt(14)).decode('utf-8')
 
-                user_exists: bool = is_user()
+                # Check if user exists
+                cursor.execute("""
+                               SELECT * FROM users WHERE email = %s 
+                               """, (signup_email,))
 
-                if user_exists != True:
+                user: tuple | None = cursor.fetchone()
+
+                if not user:
                     # Insert company ID 
                     cursor.execute("""
                                    INSERT INTO companies (name) VALUES (%s)
@@ -81,6 +76,9 @@ def signup() -> Response:
 
                     # Store ID in a variable
                     signup_user_company_id: tuple | None = cursor.fetchone()
+
+                    if not signup_user_company_id:
+                        return jsonify({"success": False, "message": "Failed to create company"})
 
                     # Add variable value to users company_id column
                     cursor.execute("""
@@ -152,23 +150,11 @@ def login() -> Response:
         if not login_email or not login_password:
             return jsonify({"success": False, "message": "Email and password required"})
 
-        # Check if user is_admin
-        def is_admin() -> bool:
-            cursor.execute("""
-                           SELECT role FROM users WHERE email = %s
-                           """, (login_email,))
-
-            role: tuple | None = cursor.fetchone()[0]
-
-            if role == "Admin":
-                return True
-            else:
-                return False
-
+        # Process user login data
         def process_login() -> Response:
             # Check if user is_valid_user
             cursor.execute("""
-                           SELECT email, password FROM users WHERE email = %s
+                           SELECT id, role, password FROM users WHERE email = %s
                            """, (login_email,))
 
             user: tuple | None = cursor.fetchone()
@@ -176,14 +162,15 @@ def login() -> Response:
             if not user:
                 return jsonify({"success": False, "message": "User not found"})
 
-            db_email, db_password = user
+            user_id, role, db_password = user
 
-            # If login_password matches
+            # Check if login_password matches
             if bcrypt.checkpw(login_password.encode(), db_password.encode()):
                 # Verify if is_admin
-                admin_status = is_admin()
+                if role == "Admin":
+                    cursor.execute("UPDATE users SET last_login = NOW() WHERE id = %s", (user_id,))
+                    conn.commit
 
-                if admin_status:
                     return jsonify({"success": True, "message": "Login successful"})
                 else:
                     return jsonify({"success": False, "message": "Admin access required"})
