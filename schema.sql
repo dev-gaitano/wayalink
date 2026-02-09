@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS users (
 	phone_number VARCHAR(13) UNIQUE NOT NULL,
 	email VARCHAR(255) UNIQUE,
 	password VARCHAR(255) UNIQUE NOT NULL,
-	location_id UUID REFERENCES locations(id) NOT NULL,
+	location_id UUID REFERENCES locations(id),
 	is_active BOOLEAN,
 	last_login TIMESTAMP,
 	created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
