@@ -82,13 +82,15 @@ def signup() -> Response:
                                        id_number,
                                        phone_number,
                                        email,
-                                       password
+                                       password,
+                                       is_active,
+                                       last_login
                                        )
-                                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
                                    """,
                                    (signup_user_company_id, role, gender, firstname,
                                     lastname, id_number, phone_number, signup_email,
-                                    signup_password)
+                                    signup_password, True)
                                    )
                     conn.commit()
 
