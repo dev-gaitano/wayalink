@@ -1,9 +1,12 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import PhoneInput from "react-phone-number-input"
 
 export default function SignupPage() {
+  const router = useRouter();
+
   const [gender, setGender] = useState("")
   const [role, setRole] = useState("")
   const [firstname, setFirstname] = useState("")
@@ -50,6 +53,12 @@ export default function SignupPage() {
       // Check if the response is ok AND if the API returned success
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}, message: ${data.message || res.statusText}`)
+      }
+
+      if (data.success === true) {
+        router.push("/home")
+      } else {
+        throw new Error(data.message)
       }
     } catch (e) {
       console.log(e)
