@@ -40,7 +40,6 @@ def signup() -> Response:
         if not signup_data:
             return jsonify({"success": False, "message": "No JSON data provided"})
 
-        role: str | None = signup_data.get("role")
         gender: str | None = signup_data.get("gender")
         firstname: str | None = signup_data.get("firstname")
         lastname: str | None = signup_data.get("lastname")
@@ -68,6 +67,7 @@ def signup() -> Response:
                     cursor.execute("""
                                    INSERT INTO companies (name) VALUES (%s)
                                    """, (company_name,))
+                    conn.commit()
 
                     # Select ID where company_name in comapnies matches user input
                     cursor.execute("""
@@ -84,7 +84,6 @@ def signup() -> Response:
                     cursor.execute("""
                                    INSERT INTO users (
                                        company_id,
-                                       role,
                                        gender,
                                        firstname,
                                        lastname,
@@ -95,9 +94,9 @@ def signup() -> Response:
                                        is_active,
                                        last_login
                                        )
-                                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+                                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
                                    """,
-                                   (signup_user_company_id, role, gender, firstname,
+                                   (signup_user_company_id, gender, firstname,
                                     lastname, id_number, phone_number, signup_email,
                                     hashed_password, True)
                                    )
