@@ -196,19 +196,12 @@ Welcome to WayaLink
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- CONTACT -->
-
-## Contributors
-
-**Eugene Gaitano** - eugenecampbellgaitano@gmail.com  
-**Ian Njenga** - iank.njenga@gmail.com  
-**Nurhan Garang** - garangnurhan57@gmail.com
-
-This project is part of the WUD Africa AI Hackathon 2025.
 
 <br />
 
 <div align="center">
+    <p>This project is part of the WUD Africa AI Hackathon 2025.</p>
+    <p>Eugene Gaitano - dev.gaitano@gmail.com </p>
     <a href="#readme-top">back to top</a>
 </div>
 
