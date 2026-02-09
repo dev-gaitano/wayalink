@@ -42,7 +42,9 @@ export default function SignupPage() {
       )
 
       // Parse the JSON response from the API
-      const data = await res.json().catch(() => ({ success: false, message: "Failed to parse response" }))
+      const data = await res.json().catch(() => (
+        { success: false, message: "Failed to parse response" }
+      ))
       console.log("API Response:", data)
 
       // Check if the response is ok AND if the API returned success
