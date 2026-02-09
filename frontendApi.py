@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, Response, request, jsonify
 from flask_cors import CORS
 from databaseConnection import db_connection
 import os
 from dotenv import load_dotenv
 import bcrypt
+from typing import Any
 
 load_dotenv()
 
@@ -13,10 +14,9 @@ CORS(app)
 # =====================================================
 # USER AUTH
 # =====================================================
-
 # User Email Sign Up
 @app.route("/api/signup", methods=["POST"])
-def signup():
+def signup() -> Response:
     conn = None
     cursor = None
 
@@ -24,17 +24,21 @@ def signup():
         conn = db_connection()
         cursor = conn.cursor()
 
-        signup_data = request.get_json()
-        role = signup_data.get("role")
-        gender = signup_data.get("gender")
-        firstname = signup_data.get("firstname")
-        lastname = signup_data.get("lastname")
-        id_number = signup_data.get("idNumber")
-        phone_number = signup_data.get("phoneNumber")
-        signup_email = signup_data.get("signupEmail")
-        company_name = signup_data.get("companyname")
-        signup_password = signup_data.get("signupPassword")
-        confirmed_password = signup_data.get("confirmedPassword")
+        signup_data: dict[str, Any] | None = request.get_json()
+
+        if not signup_data:
+            return jsonify({"success": False, "message": "No JSON data provided"})
+
+        role: str | None = signup_data.get("role")
+        gender: str | None = signup_data.get("gender")
+        firstname: str | None = signup_data.get("firstname")
+        lastname: str | None = signup_data.get("lastname")
+        id_number: str | None = signup_data.get("idNumber")
+        phone_number: str | None = signup_data.get("phoneNumber")
+        signup_email: str | None = signup_data.get("signupEmail")
+        company_name: str | None = signup_data.get("companyname")
+        signup_password: str | None = signup_data.get("signupPassword")
+        confirmed_password: str | None = signup_data.get("confirmedPassword")
 
         def is_user():
             cursor.execute("""
@@ -47,26 +51,30 @@ def signup():
             else:
                 return True
 
-
-        def signup(signup_password, confirmed_password):
+        def process_signup(signup_password, confirmed_password) -> Response:
             if signup_password == confirmed_password:
                 signup_password = bcrypt.hashpw(signup_password.encode(), bcrypt.gensalt(14))
 
                 user_exists = is_user()
 
                 if user_exists != True:
+                    # Insert company ID 
                     cursor.execute("""
                                    INSERT INTO companies (name) VALUES (%s)
                                    """, (company_name,))
-                    conn.commit()
 
-                    # Insert company ID 
                     # Select ID where company_name in comapnies matches user input
-                    # Store ID in a variable
-                    # Add variable value to users company_id column
+                    cursor.execute("""
+                                   SELECT id FROM companies WHERE name = %s
+                                   """, (company_name,))
 
+                    # Store ID in a variable
+                    signup_user_company_id = cursor.fetchone()
+
+                    # Add variable value to users company_id column
                     cursor.execute("""
                                    INSERT INTO users (
+                                       company_id,
                                        role,
                                        gender,
                                        firstname,
@@ -74,31 +82,38 @@ def signup():
                                        id_number,
                                        phone_number,
                                        email,
-                                       password
+                                       password,
+                                       is_active,
+                                       last_login
                                        )
-                                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
                                    """,
-                                   (role, gender, firstname, lastname, id_number,
-                                    phone_number, signup_email, signup_password)
+                                   (signup_user_company_id, role, gender, firstname,
+                                    lastname, id_number, phone_number, signup_email,
+                                    signup_password, True)
                                    )
                     conn.commit()
 
-                    return {"success": True, "message": "Signup successful"}
+                    return jsonify({"success": True, "message": "Signup successful"})
                 else:
-                    return {"success": False, "message": "User already exists"}
+                    return jsonify({"success": False, "message": "User already exists"})
 
             else:
-                return {"success": False, "message": "Passwords Do not match"}
+                return jsonify({"success": False, "message": "Passwords Do not match"})
 
-        def signupAuth():
-            return signup(signup_password, confirmed_password)
+        def signupAuth() -> Response:
+            return process_signup(signup_password, confirmed_password)
 
-        result = signupAuth()
-        return jsonify(result)
+        signup_result: Response = signupAuth()
+        return signup_result
 
     except Exception as e:
         print(e)
-        return {"success": False, "message": "There was an error Signing up"}
+        return jsonify({
+            "success": False,
+            "message": "There was an error Signing up",
+            "error": str(e)
+        })
 
     finally:
         if cursor:

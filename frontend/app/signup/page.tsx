@@ -1,9 +1,12 @@
 "use client"
 
-import { setFlagsFromString } from "node:v8"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
+import PhoneInput from "react-phone-number-input"
 
 export default function SignupPage() {
+  const router = useRouter();
+
   const [gender, setGender] = useState("")
   const [role, setRole] = useState("")
   const [firstname, setFirstname] = useState("")
@@ -42,12 +45,20 @@ export default function SignupPage() {
       )
 
       // Parse the JSON response from the API
-      const data = await res.json().catch(() => ({ success: false, message: "Failed to parse response" }))
+      const data = await res.json().catch(() => (
+        { success: false, message: "Failed to parse response" }
+      ))
       console.log("API Response:", data)
 
       // Check if the response is ok AND if the API returned success
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}, message: ${data.message || res.statusText}`)
+      }
+
+      if (data.success === true) {
+        router.push("/home")
+      } else {
+        throw new Error(data.message)
       }
     } catch (e) {
       console.log(e)
@@ -108,11 +119,13 @@ export default function SignupPage() {
                 onChange={(event) => { setIdNumber(event.target.value) }}
                 required
               />
-              <input
+              <PhoneInput
+                international
+                defaultCountry="KE"
                 id="input-phone-number"
                 placeholder="Phone Number"
                 value={phoneNumber}
-                onChange={(event) => { setPhoneNumber(event.target.value) }}
+                onChange={(value) => setPhoneNumber(value || "")}
                 required
               />
               <input

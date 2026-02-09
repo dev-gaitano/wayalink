@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS users (
 	id_number VARCHAR(10) UNIQUE NOT NULL,
 	phone_number VARCHAR(13) UNIQUE NOT NULL,
 	email VARCHAR(255) UNIQUE,
-	password VARCHAR(32) UNIQUE NOT NULL,
-	location_id UUID REFERENCES locations(id) NOT NULL,
+	password VARCHAR(255) UNIQUE NOT NULL,
+	location_id UUID REFERENCES locations(id),
 	is_active BOOLEAN,
 	last_login TIMESTAMP,
 	created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
