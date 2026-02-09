@@ -1,11 +1,10 @@
-"use client"
-
-export default function LogisticsDashboard() {
+export default function LoginPage() {
 
   return (
     <div className="dashboard-container">
       {/* Background patterns and gradients */}
       <div className="grid-pattern" aria-hidden />
+
       <div className="diagonal-lines">
         <div className="diagonal-line diagonal-45"></div>
         <div className="diagonal-line diagonal-neg-45"></div>
@@ -13,7 +12,6 @@ export default function LogisticsDashboard() {
         <div className="diagonal-line diagonal-60"></div>
       </div>
 
-      <p className="placeholder-text">This page is currently under development</p>
     </div>
   )
 }

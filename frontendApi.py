@@ -1,11 +1,176 @@
-from flask import Flask
+from flask import Flask, Response, request, jsonify
+from flask_cors import CORS
 from databaseConnection import db_connection
 import os
 from dotenv import load_dotenv
+import bcrypt
+from typing import Any
 
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
+
+# =====================================================
+# USER AUTH
+# =====================================================
+# User Email Sign Up
+@app.route("/api/signup", methods=["POST"])
+def signup() -> Response:
+    conn = None
+    cursor = None
+
+    try:
+        conn = db_connection()
+        cursor = conn.cursor()
+
+        signup_data: dict[str, Any] | None = request.get_json()
+
+        if not signup_data:
+            return jsonify({"success": False, "message": "No JSON data provided"})
+
+        role: str | None = signup_data.get("role")
+        gender: str | None = signup_data.get("gender")
+        firstname: str | None = signup_data.get("firstname")
+        lastname: str | None = signup_data.get("lastname")
+        id_number: str | None = signup_data.get("idNumber")
+        phone_number: str | None = signup_data.get("phoneNumber")
+        signup_email: str | None = signup_data.get("signupEmail")
+        company_name: str | None = signup_data.get("companyname")
+        signup_password: str | None = signup_data.get("signupPassword")
+        confirmed_password: str | None = signup_data.get("confirmedPassword")
+
+        def is_user():
+            cursor.execute("""
+                           SELECT * FROM users WHERE email = %s 
+                           """, (signup_email,))
+            result = cursor.fetchone()
+
+            if result is None:
+                return False
+            else:
+                return True
+
+        def process_signup(signup_password, confirmed_password) -> Response:
+            if signup_password == confirmed_password:
+                signup_password = bcrypt.hashpw(signup_password.encode(), bcrypt.gensalt(14))
+
+                user_exists = is_user()
+
+                if user_exists != True:
+                    # Insert company ID 
+                    cursor.execute("""
+                                   INSERT INTO companies (name) VALUES (%s)
+                                   """, (company_name,))
+
+                    # Select ID where company_name in comapnies matches user input
+                    cursor.execute("""
+                                   SELECT id FROM companies WHERE name = %s
+                                   """, (company_name,))
+
+                    # Store ID in a variable
+                    signup_user_company_id = cursor.fetchone()
+
+                    # Add variable value to users company_id column
+                    cursor.execute("""
+                                   INSERT INTO users (
+                                       company_id,
+                                       role,
+                                       gender,
+                                       firstname,
+                                       lastname,
+                                       id_number,
+                                       phone_number,
+                                       email,
+                                       password,
+                                       is_active,
+                                       last_login
+                                       )
+                                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+                                   """,
+                                   (signup_user_company_id, role, gender, firstname,
+                                    lastname, id_number, phone_number, signup_email,
+                                    signup_password, True)
+                                   )
+                    conn.commit()
+
+                    return jsonify({"success": True, "message": "Signup successful"})
+                else:
+                    return jsonify({"success": False, "message": "User already exists"})
+
+            else:
+                return jsonify({"success": False, "message": "Passwords Do not match"})
+
+        def signupAuth() -> Response:
+            return process_signup(signup_password, confirmed_password)
+
+        signup_result: Response = signupAuth()
+        return signup_result
+
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "success": False,
+            "message": "There was an error Signing up",
+            "error": str(e)
+        })
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+
+# User Log In
+@app.route("/api/login", methods=["POST"])
+def login():
+    # Get user login data
+    login_data = request.get_json()
+    login_email = login_data.get("loginEmail")
+    login_password = login_data.get("loginPassword")
+
+    # Check if user is_valid_user
+    def is_user():
+        # Check if email_exists in the database
+        db_email = "dev.gaitano@gmail.com"
+
+        if login_email == db_email:
+            # If email_exists check if login_password matches
+            db_password = bcrypt.hashpw("admin123".encode(), bcrypt.gensalt(14))
+
+            if bcrypt.checkpw(login_password.encode(), db_password):
+                is_user = True
+            else:
+                is_user = False
+
+        else:
+            is_user = False
+
+        return is_user
+
+    # Check if user is_admin
+    def is_admin():
+        return True
+
+    def loginAuth():
+        user_exists = is_user()
+
+        if user_exists:
+            # Verify if is_admin
+            admin_status = is_admin()
+            if admin_status:
+                return {"success": True, "message": "Login successful"}
+            else:
+                return {"success": False, "message": "Admin access required"}
+
+        else:
+            return {"success": False, "message": "Invalid credentials"}
+
+    result = loginAuth()
+    return jsonify(result)
+
+
 
 # =====================================================
 # DASHBOARD
@@ -199,15 +364,15 @@ def route_optimization():
                    FROM routes;
                    """)
     rows = cursor.fetchone()
-    sum_of_distances = rows[0] if rows else 0
+    sum_of_distances = rows[0] if (rows and rows[0] is not None) else 0
 
-    avg_distance = sum_of_distances / total_routes
+    avg_distance = sum_of_distances / total_routes if total_routes > 0 else 0
 
     # Fetch average Stops
     cursor.execute("SELECT COUNT(*) FROM route_stops")
     rows = cursor.fetchone()
     total_route_stops = rows[0] if rows else 0
-    avg_stops = total_route_stops / total_routes
+    avg_stops = total_route_stops / total_routes if total_routes > 0 else 0
 
     route_optimization_data = {
             "total_routes" : total_routes,
@@ -217,34 +382,6 @@ def route_optimization():
             }
 
     return route_optimization_data
-
-
-
-# =====================================================
-# DETAILS
-# =====================================================
-
-@app.route("/api/details/shipments", methods=["GET"])
-def shipments():
-    conn = db_connection()
-    cursor = conn.cursor()
-
-    # Fetch total shipments
-    cursor.execute("SELECT COUNT(*) FROM shipments")
-    rows = cursor.fetchone()
-    total_shipments = rows[0] if rows else 0
-        
-    cursor.close()
-    conn.close()
-
-    # Store data in a variable shipments
-    shipments_data = {
-            "total_shipments" : total_shipments,
-            }
-
-    # export data
-    return shipments_data
-
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5001))

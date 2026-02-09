@@ -1,0 +1,4 @@
+.flexed {
+  border: solid 1px red;
+  display: flex;
+}

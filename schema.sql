@@ -31,16 +31,16 @@ CREATE TABLE IF NOT EXISTS locations (
 CREATE TABLE IF NOT EXISTS users (
 	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	company_id UUID REFERENCES companies(id) NOT NULL,
+	role VARCHAR(50) NOT NULL,
+	gender VARCHAR(6),
+	firstname VARCHAR(50) NOT NULL,
+	lastname VARCHAR(50) NOT NULL,
 	id_number VARCHAR(10) UNIQUE NOT NULL,
 	phone_number VARCHAR(13) UNIQUE NOT NULL,
 	email VARCHAR(255) UNIQUE,
-	firstname VARCHAR(50) NOT NULL,
-	lastname VARCHAR(50) NOT NULL,
-	title VARCHAR(50) NOT NULL,
-	role VARCHAR(50) NOT NULL,
-	gender VARCHAR(6),
-	password VARCHAR(32) UNIQUE NOT NULL,
-	location_id UUID REFERENCES locations(id) NOT NULL,
+	password VARCHAR(255) UNIQUE NOT NULL,
+	location_id UUID REFERENCES locations(id),
+	is_active BOOLEAN,
 	last_login TIMESTAMP,
 	created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
 );
@@ -82,6 +82,7 @@ CREATE TABLE IF NOT EXISTS routes (
 	destination_id UUID REFERENCES locations(id) NOT NULL,
 	total_distance_km NUMERIC (10,2),
 	estimated_time_hours NUMERIC(6, 2),
+	is_active BOOLEAN,
 	created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
 );
 

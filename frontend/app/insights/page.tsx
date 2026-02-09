@@ -1,9 +1,8 @@
 "use client"
 
-export default function LogisticsDashboard() {
-
+export default function SignupPage() {
   return (
-    <div className="dashboard-container">
+    <div className="insights-container">
       {/* Background patterns and gradients */}
       <div className="grid-pattern" aria-hidden />
       <div className="diagonal-lines">
@@ -13,7 +12,7 @@ export default function LogisticsDashboard() {
         <div className="diagonal-line diagonal-60"></div>
       </div>
 
-      <p className="placeholder-text">This page is currently under development</p>
+      <p>This page is currently under development</p>
     </div>
   )
 }
