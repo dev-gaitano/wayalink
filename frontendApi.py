@@ -9,7 +9,17 @@ from typing import Any
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={
+    r"/api/*": {
+        "origins": [
+            "http://localhost:3000",
+            "https://wayalink.vercel.app" 
+        ],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"],
+        "supports_credentials": True
+    }
+})
 
 # =====================================================
 # USER AUTH
@@ -193,7 +203,6 @@ def login() -> Response:
             cursor.close()
         if conn:
             conn.close()
-
 
 
 # =====================================================
