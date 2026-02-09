@@ -1,7 +1,7 @@
 "use client"
 
-import { setFlagsFromString } from "node:v8"
 import { useState } from "react"
+import PhoneInput from "react-phone-number-input"
 
 export default function SignupPage() {
   const [gender, setGender] = useState("")
@@ -69,7 +69,7 @@ export default function SignupPage() {
       </div>
 
       <div className="dashboard-card">
-        <div className="right-sidebar flexed">
+        <div id="signup_form_container" className="flexed">
           <form onSubmit={handleSignup}>
             <div>
               <input
@@ -110,11 +110,13 @@ export default function SignupPage() {
                 onChange={(event) => { setIdNumber(event.target.value) }}
                 required
               />
-              <input
+              <PhoneInput
+                international
+                defaultCountry="KE"
                 id="input-phone-number"
                 placeholder="Phone Number"
                 value={phoneNumber}
-                onChange={(event) => { setPhoneNumber(event.target.value) }}
+                onChange={(value) => setPhoneNumber(value || "")}
                 required
               />
               <input
@@ -168,6 +170,7 @@ export default function SignupPage() {
             <a id="link-login" href="/login" >Log in</a>
           </div>
         </div>
+        <div className="right-sidebar"></div>
       </div>
     </div>
   )

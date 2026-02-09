@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, Response, request, jsonify
 from flask_cors import CORS
 from databaseConnection import db_connection
 import os
@@ -14,10 +14,9 @@ CORS(app)
 # =====================================================
 # USER AUTH
 # =====================================================
-
 # User Email Sign Up
 @app.route("/api/signup", methods=["POST"])
-def signup():
+def signup() -> Response:
     conn = None
     cursor = None
 
@@ -28,7 +27,7 @@ def signup():
         signup_data: dict[str, Any] | None = request.get_json()
 
         if not signup_data:
-            return {"success": False, "message": "No JSON data provided"}
+            return jsonify({"success": False, "message": "No JSON data provided"})
 
         role: str | None = signup_data.get("role")
         gender: str | None = signup_data.get("gender")
@@ -52,19 +51,18 @@ def signup():
             else:
                 return True
 
-
-        def process_signup(signup_password, confirmed_password) -> dict:
+        def process_signup(signup_password, confirmed_password) -> Response:
             if signup_password == confirmed_password:
                 signup_password = bcrypt.hashpw(signup_password.encode(), bcrypt.gensalt(14))
 
                 user_exists = is_user()
 
                 if user_exists != True:
+                    # Insert company ID 
                     cursor.execute("""
                                    INSERT INTO companies (name) VALUES (%s)
                                    """, (company_name,))
 
-                    # Insert company ID 
                     # Select ID where company_name in comapnies matches user input
                     cursor.execute("""
                                    SELECT id FROM companies WHERE name = %s
@@ -94,26 +92,26 @@ def signup():
                                    )
                     conn.commit()
 
-                    return {"success": True, "message": "Signup successful"}
+                    return jsonify({"success": True, "message": "Signup successful"})
                 else:
-                    return {"success": False, "message": "User already exists"}
+                    return jsonify({"success": False, "message": "User already exists"})
 
             else:
-                return {"success": False, "message": "Passwords Do not match"}
+                return jsonify({"success": False, "message": "Passwords Do not match"})
 
-        def signupAuth():
+        def signupAuth() -> Response:
             return process_signup(signup_password, confirmed_password)
 
-        result = signupAuth()
-        return jsonify(result)
+        signup_result: Response = signupAuth()
+        return signup_result
 
     except Exception as e:
         print(e)
-        return {
+        return jsonify({
             "success": False,
             "message": "There was an error Signing up",
             "error": str(e)
-        }
+        })
 
     finally:
         if cursor:
