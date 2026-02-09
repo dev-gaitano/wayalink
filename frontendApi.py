@@ -53,7 +53,7 @@ def signup():
                 return True
 
 
-        def signup(signup_password, confirmed_password) -> dict:
+        def process_signup(signup_password, confirmed_password) -> dict:
             if signup_password == confirmed_password:
                 signup_password = bcrypt.hashpw(signup_password.encode(), bcrypt.gensalt(14))
 
@@ -67,7 +67,7 @@ def signup():
                     # Insert company ID 
                     # Select ID where company_name in comapnies matches user input
                     cursor.execute("""
-                                   SELECT FROM companies (id) WHERE name = %s
+                                   SELECT id FROM companies WHERE name = %s
                                    """, (company_name,))
 
                     # Store ID in a variable
@@ -86,7 +86,7 @@ def signup():
                                        email,
                                        password
                                        )
-                                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                                    """,
                                    (signup_user_company_id, role, gender, firstname,
                                     lastname, id_number, phone_number, signup_email,
@@ -102,7 +102,7 @@ def signup():
                 return {"success": False, "message": "Passwords Do not match"}
 
         def signupAuth():
-            return signup(signup_password, confirmed_password)
+            return process_signup(signup_password, confirmed_password)
 
         result = signupAuth()
         return jsonify(result)
