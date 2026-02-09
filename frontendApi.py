@@ -36,7 +36,7 @@ def signup():
         lastname: str | None = signup_data.get("lastname")
         id_number: str | None = signup_data.get("idNumber")
         phone_number: str | None = signup_data.get("phoneNumber")
-        signup_email: str | None = signup_data.get("signupemail")
+        signup_email: str | None = signup_data.get("signupEmail")
         company_name: str | None = signup_data.get("companyname")
         signup_password: str | None = signup_data.get("signupPassword")
         confirmed_password: str | None = signup_data.get("confirmedPassword")
