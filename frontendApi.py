@@ -64,7 +64,7 @@ def signup() -> Response:
 
         def process_signup(signup_password, confirmed_password) -> Response:
             if signup_password == confirmed_password:
-                signup_password = bcrypt.hashpw(signup_password.encode(), bcrypt.gensalt(14))
+                hashed_password = bcrypt.hashpw(signup_password.encode(), bcrypt.gensalt(14)).decode('utf-8')
 
                 user_exists: bool = is_user()
 
@@ -101,7 +101,7 @@ def signup() -> Response:
                                    """,
                                    (signup_user_company_id, role, gender, firstname,
                                     lastname, id_number, phone_number, signup_email,
-                                    signup_password, True)
+                                    hashed_password, True)
                                    )
                     conn.commit()
 
@@ -148,6 +148,9 @@ def login() -> Response:
 
         login_email: str | None = login_data.get("loginEmail")
         login_password: str | None = login_data.get("loginPassword")
+
+        if not login_email or not login_password:
+            return jsonify({"success": False, "message": "Email and password required"})
 
         # Check if user is_admin
         def is_admin() -> bool:
