@@ -50,13 +50,10 @@ def signup() -> Response:
         signup_password: str | None = signup_data.get("signupPassword")
         confirmed_password: str | None = signup_data.get("confirmedPassword")
 
-<<<<<<< HEAD
-=======
         if not all([gender, firstname, lastname, id_number, phone_number,
                     signup_email, company_name, signup_password, confirmed_password]):
             return jsonify({ "success" : False, "message" : "All input fields required" })
 
->>>>>>> dev
         # Process user signup data
         def process_signup(signup_password, confirmed_password) -> Response:
             if signup_password == confirmed_password:
@@ -71,14 +68,7 @@ def signup() -> Response:
 
                 if not user:
                     # Insert company ID 
-<<<<<<< HEAD
-                    cursor.execute("""
-                                   INSERT INTO companies (name) VALUES (%s)
-                                   """, (company_name,))
-                    conn.commit()
 
-=======
->>>>>>> dev
                     # Select ID where company_name in comapnies matches user input
                     cursor.execute("""
                                    INSERT INTO companies (name) VALUES (%s)
@@ -86,19 +76,12 @@ def signup() -> Response:
                                    """, (company_name,))
 
                     # Store ID in a variable
-<<<<<<< HEAD
-                    signup_user_company_id: tuple | None = cursor.fetchone()
-
-                    if not signup_user_company_id:
-                        return jsonify({"success": False, "message": "Failed to create company"})
-=======
                     company_id_result: tuple | None = cursor.fetchone()
 
                     if not company_id_result:
                         return jsonify({"success": False, "message": "Failed to create company"})
 
                     signup_user_company_id = company_id_result[0]
->>>>>>> dev
 
                     # Add variable value to users company_id column
                     cursor.execute("""
@@ -188,11 +171,7 @@ def login() -> Response:
                 # Verify if is_admin
                 if role == "Admin":
                     cursor.execute("UPDATE users SET last_login = NOW() WHERE id = %s", (user_id,))
-<<<<<<< HEAD
-                    conn.commit
-=======
                     conn.commit()
->>>>>>> dev
 
                     return jsonify({"success": True, "message": "Login successful"})
                 else:
