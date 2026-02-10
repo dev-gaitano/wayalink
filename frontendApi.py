@@ -5,10 +5,21 @@ import os
 from dotenv import load_dotenv
 import bcrypt
 from typing import Any
+import jwt
+from datetime import datetime, timedelta
+from functools import wraps
 
+# Config
 load_dotenv()
 
 app = Flask(__name__)
+
+# Setup env variables
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+if not app.config["JWT_SECRET_KEY"]:
+    raise RuntimeError("JWT_SECRET_KEY not set")
+
+# Setup CORS
 CORS(app, resources={
     r"/api/*": {
         "origins": [
@@ -24,7 +35,73 @@ CORS(app, resources={
 # =====================================================
 # USER AUTH
 # =====================================================
-# User Email Sign Up
+# Generate JWT Token
+def generate_jwt_token(user_id: str | None, firstname: str | None, email: str | None) -> str:
+    payload: dict[str, Any] = {
+        "user_id" : str(user_id),
+        "firstname" : firstname,
+        "email" : email,
+        "exp" : datetime.utcnow() + timedelta(minutes=30),
+        "iat" : datetime.utcnow()
+    }
+
+    jwt_token: str = jwt.encode(
+        payload,
+        app.config["JWT_SECRET_KEY"],
+        algorithm="HS256"
+    )
+
+    return jwt_token
+
+# Verify JWT Token
+def jwt_token_required(f):
+    @wraps(f)
+    def decorated_func(*args, **kwargs):
+        jwt_token: str | None = request.headers.get("Authorization")
+
+        if not jwt_token:
+            return jsonify({
+                "success" : False,
+                "message" : "Token not found"
+            }), 401
+
+        if not jwt_token.startswith("Bearer "):
+            return jsonify({
+                "success" : False,
+                "message" : "Invalid token format"
+            }), 401
+
+        jwt_token = jwt_token[7:]
+
+        try:
+                jwt_data: dict = jwt.decode(
+                    jwt_token,
+                    app.config["JWT_SECRET_KEY"],
+                    leeway=timedelta(minutes=2),
+                    algorithms=["HS256"]
+                )
+
+                current_user_id = jwt_data["user_id"]
+
+        except jwt.ExpiredSignatureError:
+            return jsonify({
+                "success": False,
+                "message": "Token has expired",
+                "expired": True
+            }), 401
+
+        except jwt.InvalidTokenError:
+            return jsonify({
+                "success": False,
+                "message": "Invalid token"
+            }), 401
+
+        return f(current_user_id, *args, **kwargs)
+
+    return decorated_func
+
+
+# User Email Signup
 @app.route("/api/signup", methods=["POST"])
 def signup() -> Response:
     conn = None
@@ -166,29 +243,44 @@ def login() -> Response:
 
             user_id, role, db_password = user
 
-            # Check if login_password matches
-            if bcrypt.checkpw(login_password.encode(), db_password.encode()):
-                # Verify if is_admin
-                if role == "Admin":
-                    cursor.execute("UPDATE users SET last_login = NOW() WHERE id = %s", (user_id,))
-                    conn.commit()
+# Verify token endpoint
+@app.route("/api/verify_token", methods=["GET"])
+@jwt_token_required
+def verify_token(current_user_id: str) -> Response:
+    return jsonify({
+        "success" : True,
+        "valid" : True,
+        "user_id" : current_user_id
+    })
 
-                    return jsonify({"success": True, "message": "Login successful"})
-                else:
-                    return jsonify({"success": False, "message": "Admin access required"})
-            else:
-                return jsonify({"success": False, "message": "Invalid credentials"})
+@app.route("/api/check-user-exists", methods=["POST"])
+def check_user_exists() -> Response:
+    conn = None
+    cursor = None
 
-        login_result: Response = process_login()
-        return login_result
+    try:
+        conn = db_connection()
+        cursor = conn.cursor()
+
+        data = request.get_json()
+        email = data.get("email")
+
+        if not email:
+            return jsonify({"exists": False})
+
+        cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
+        user_id: tuple | None = cursor.fetchone()
+
+        return jsonify({"exists" : bool(user_id)})
 
     except Exception as e:
         print(e)
         return jsonify({
-            "success": False,
-            "message": "There was an error Logging in",
-            "error": str(e)
-        })
+            "success" : False,
+            "message" : "Error checking if user exists",
+            "error" : str(e),
+            "exists" : False
+            })
 
     finally:
         if cursor:
