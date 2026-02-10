@@ -8,6 +8,7 @@ from typing import Any
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
+from psycopg2 import IntegrityError
 
 # Config
 load_dotenv()
@@ -36,13 +37,11 @@ CORS(app, resources={
 # USER AUTH
 # =====================================================
 # Generate JWT Token
-def generate_jwt_token(user_id: str | None, firstname: str | None, email: str | None) -> str:
+def generate_jwt_token(user_id: str) -> str:
     payload: dict[str, Any] = {
         "user_id" : str(user_id),
-        "firstname" : firstname,
-        "email" : email,
+        "iat" : datetime.utcnow(),
         "exp" : datetime.utcnow() + timedelta(minutes=30),
-        "iat" : datetime.utcnow()
     }
 
     jwt_token: str = jwt.encode(
@@ -74,14 +73,14 @@ def jwt_token_required(f):
         jwt_token = jwt_token[7:]
 
         try:
-                jwt_data: dict = jwt.decode(
-                    jwt_token,
-                    app.config["JWT_SECRET_KEY"],
-                    leeway=timedelta(minutes=2),
-                    algorithms=["HS256"]
-                )
+            jwt_data: dict = jwt.decode(
+                jwt_token,
+                app.config["JWT_SECRET_KEY"],
+                leeway=timedelta(minutes=2),
+                algorithms=["HS256"]
+            )
 
-                current_user_id = jwt_data["user_id"]
+            current_user_id = jwt_data["user_id"]
 
         except jwt.ExpiredSignatureError:
             return jsonify({
@@ -198,7 +197,7 @@ def signup() -> Response:
                 user_id = user_id_result[0]
                 conn.commit()
 
-                jwt_token = generate_jwt_token(user_id, firstname, signup_email)
+                jwt_token = generate_jwt_token(user_id)
 
                 return jsonify({
                     "success": True,
@@ -220,8 +219,16 @@ def signup() -> Response:
         else:
             return jsonify({
                 "success": False,
-                "message": "Passwords Do not match"
+                "message": "Passwords do not match"
             })
+
+    except IntegrityError:
+        if conn:
+            conn.rollback()
+        return jsonify({
+            "success": False,
+            "message": "User already exists"
+        })
 
     except Exception as e:
         if conn:
@@ -292,7 +299,7 @@ def login() -> Response:
                                """, (user_id,))
                 conn.commit()
 
-                jwt_token = generate_jwt_token(user_id, firstname, db_email)
+                jwt_token = generate_jwt_token(user_id)
 
                 return jsonify({
                     "success": True,
