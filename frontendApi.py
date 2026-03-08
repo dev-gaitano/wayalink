@@ -435,8 +435,8 @@ def active_shipments():
                        WHERE latest_statuses.status = 'delivered'
                        """)
 
-        result = cursor.fetchone()[0]
-        sum_of_delivery_hours = int(result) if result is not None else 0
+        rows = cursor.fetchone()
+        sum_of_delivery_hours = int(rows[0]) if rows is not None else 0
 
         # count of all delivered shipments
         total_delivered_shipments = all_status_counts.get("delivered", 0)
